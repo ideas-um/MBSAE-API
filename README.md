@@ -20,7 +20,7 @@ Additional Contributors:
 - Safa Bakhshi
 - Alex Kerlee
 
-README last updated: 05 Mar 2025
+README last updated: 21 Mar 2025
 
 ***************************
 
@@ -59,12 +59,13 @@ If there are no printouts with error messages in the console log, then the insta
 Each of the scripts provided in this repository is considered to be a "Browser Action", meaning that the function can only be accessed by right-clicking on a model element.
 Once the model element is selected and a dropdown menu appears, the following functions (depending on what you install) should appear:
 
-- **Import ADH to Stereotype**: reads a JSON file and creates a stereotype for any component with a Work Breakdown Structure (WBS) Number in the ADH. The stereotypes are stored in a profile. This code is located in the "CreateStereotype" folder.
-- **Read ADH**: reads a JSON file and creates the system model (blocks, value properties, requirements, and packages) in MagicDraw. Any component nested within another one is assigned as a part property of the higher level component. This code is located in the "ReadADH" folder.
-- **Update ADH**: reads an ADH file and compares the value of each value property to the system model. If any values are not equal, the value from the ADH is overwritten into the system model. This code is located in the "UpdateADH" folder.
-- **Write from MagicDraw to ADH**: generates a JSON file from the system model in MagicDraw. The model element that is selected acts as the highest-level container; anything nested within that block/package will be written to the JSON file. This code is located in the "WriteADH" folder.
+- **MBSA&E: Import Stereotypes**: reads a JSON file and creates a stereotype for any component with a Work Breakdown Structure (WBS) Number in the ADH. The stereotypes are stored in a profile. This code is located in the "ImportStereotypes" folder.
+- **MBSA&E: Read ADH**: reads a JSON file and creates the system model (blocks, value properties, requirements, and packages) in MagicDraw. Any component nested within another one is assigned as a part property of the higher level component. This code is located in the "ReadADH" folder.
+- **MBSA&E: Update ADH**: reads an ADH file and compares the value of each value property to the system model. If any values are not equal, the value from the ADH is overwritten into the system model. This code is located in the "UpdateADH" folder.
+- **MBSA&E: Write to ADH**: generates a JSON file from the system model in MagicDraw. The model element that is selected acts as the highest-level container; anything nested within that block/package will be written to the JSON file. This code is located in the "WriteADH" folder.
+- **MBSA&E: Write Instance to ADH**: generates a JSON file from an Instance Specification in MagicDraw. The Instance Specification selected acts as the highest-level container; anything nested within that will be written to the JSON file. This code is located in the "WriteInstance" folder.
 
-Currently, the ADH being read must be in the following directory.
+Currently, the ADH being read/updated must be in the following directory.
 
 ```
 <Root>\Magic Systems of Systems Architect
