@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script
+	id="ImportStereotype"
+	name="ImportStereotype"
+	version="1.0"
+	provider-name="prmoko"
+	script-file="main.py"
+	requiresApi="1.0">
+</script>
