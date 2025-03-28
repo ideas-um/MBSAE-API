@@ -11,7 +11,7 @@ READ ADH:
 
 Written by Paul Mokotoff, prmoko@umich.edu
 
-Last Updated: 21 Mar 2025
+Last Updated: 28 Mar 2025
 
 Inputs:
 
@@ -942,7 +942,7 @@ class ModelStructureGenerator():
                     DataType = +2
 
                 # end if
-
+                
                 # check for keywords
                 if (ikey == "components") or (ikey == "requirements") or (ikey == "performance") or (ikey == "behavior"):
 
@@ -963,7 +963,7 @@ class ModelStructureGenerator():
                 elif (DataType == -1):
                     
                     # read a data structure
-                    self.ReadDataStructure(ParentPackage, ikey, ivalue, ReqSterFlag)
+                    self.ReadDataStructure(ParentPackage, ikey, ivalue, ReqSterFlag, HigherLevelComp)
                     
                 elif (DataType == +1):
                     
@@ -1015,8 +1015,8 @@ class ModelStructureGenerator():
                     # get the children of the main package
                     Children = MainPackage.getOwnedElement()
                 
-                    # assume that the parent is the main package
-                    Parent = MainPackage
+                    # assume that the parent is the block unless an architecture package exists
+                    Parent = ComponentClass
                     
                     # loop through all the children
                     for ichild in Children:
@@ -1131,7 +1131,7 @@ class ModelStructureGenerator():
                             
                             # loop through each of the components
                             for icomp in range(len(ivalue)):
-                                
+
                                 # create the name
                                 CompName = ikey + "__" + str(icomp)
                                 
@@ -1152,6 +1152,9 @@ class ModelStructureGenerator():
                         # end for
                         
                     # end if
+
+                    # turn off the requirement flag
+                    ReqSterFlag = 0
                     
                 else:
                     
@@ -1252,26 +1255,28 @@ class ModelStructureGenerator():
     # -------------------------------------------------------
 
     # function to read data and make specific values for each array element (if needed)
-    def ReadData(self, Block, Key, Value, ReqFlag):
+    def ReadData(self, Block, Key, Value, ReqFlag, HigherLevelComp = None):
         """
 
-        ReadData(self, Block, Key, Value, ReqFlag)
+        ReadData(self, Block, Key, Value, ReqFlag, HigherLevelComp = None)
 
         Read a key-value pair from a JSON string and process it by making the appropriate model elements in the SysML model.
 
         INPUTS:
-            self   : the SysML model
+            self           : the SysML model
 
-            Block  : the current block that additional model elements will be built on
+            Block          : the current block that additional model elements will be built on
 
-            Key    : the current key from the JSON string
+            Key            : the current key from the JSON string
 
-            Value  : the current value corresponding to the key in the JSON string
+            Value          : the current value corresponding to the key in the JSON string
 
-            ReqFlag: flag to make a requirement (1) or not (0)
+            ReqFlag        : flag to make a requirement (1) or not (0)
+
+            HigherLevelComp: (optional, default is None) a higher-level component to create part properties from
 
         OUTPUTS:
-            Block  : the current block with additional model elements built off of it
+            Block          : the current block with additional model elements built off of it
 
         """
         
@@ -1336,20 +1341,63 @@ class ModelStructureGenerator():
                     
                     # check for a requirement
                     if (ReqFlag == 1):
-                        
-                        # get the name, desription, and value
-                        TempName = CurVal["name"]
-                        TempDesc = CurVal["description"]
-                        TempValu = CurVal["value"]
-                        
-                        # extract the actual value and units
-                        FinalValue = TempValu["value"]
-                        FinalUnits = TempValu["units"]
-                        
-                        # set the requirement text
-                        SH.setStereotypePropertyValue(NewBlock, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+
+                        # try to get the name, description and value
+                        try:
+                            
+                            # get the name, desription, and value
+                            TempName = CurVal["name"]
+                            TempDesc = CurVal["description"]
+                            TempValu = CurVal["value"]
+                            
+                            # extract the actual value and units
+                            FinalValue = TempValu["value"]
+                            FinalUnits = TempValu["units"]
+                            
+                            # set the requirement text
+                            SH.setStereotypePropertyValue(NewBlock, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+
+                        except:
+
+                            # try to get a string only
+                            try:
+
+                                # look for text only
+                                ReqText = CurVal["text"]
+
+                                # set the requirement text
+                                SH.setStereotypePropertyValue(NewBlock, self.ReqSter, "Text", ReqText)
+
+                            except:
+
+                                # don't load a requirement
+                                pass
+
+                            # end try-except
+
+                        # end try-except
                         
                     else:
+                        
+                        # check if there's a higher-level component for decomposition relation
+                        if (HigherLevelComp != None):
+                            
+                            # create a property
+                            PartProperty = self.Factory.createPropertyInstance()
+                            
+                            # set the owner to the higher level component
+                            PartProperty.setOwner(HigherLevelComp)
+                            
+                            # set the part property type as the lower level component
+                            PartProperty.setType(NewBlock)
+                            
+                            # use the lower level component's name as the property name
+                            PartProperty.setName(NewBlock.getName())
+                            
+                            # set a composite association
+                            PartProperty.setAggregation(MDKernel.AggregationKindEnum.COMPOSITE)
+                            
+                        # end if
                         
                         # check that it is not empty
                         try:
@@ -1358,7 +1406,7 @@ class ModelStructureGenerator():
                             for key, value in CurVal.items():
                                 
                                 # get the data for each of the items
-                                self.ReadData(NewBlock, key, value, ReqFlag)
+                                self.ReadData(NewBlock, key, value, ReqFlag, NewBlock)
                                 
                             # end for
                             
@@ -1567,10 +1615,7 @@ class ModelStructureGenerator():
 
         # get the children of the parent package
         Children = ParentPackage.getOwnedElement()
-    
-        # assume the block isn't found
-        FoundBlock = 0
-        
+            
         # loop through all children until we reach a block
         for ichild in range(len(Children)):                   
             
@@ -1589,21 +1634,11 @@ class ModelStructureGenerator():
                     # read the data as a parameter
                     Children[ichild] = self.ReadData(Children[ichild], ikey, ivalue, 0)
                     
-                    # flag for finding the block
-                    FoundBlock = 1
-                    
-                    # break out of the loop
-                    break
+                    # exit the program
+                    return
                 
                 # end if
-                
             # end for
-            
-            # break out if the block was found
-            if (FoundBlock == 1):
-                break
-            # end if
-            
         # end for
 
     # end ReadFloatingValue
@@ -1611,29 +1646,31 @@ class ModelStructureGenerator():
     # -------------------------------------------------------
 
     # function to read a data structure into a specialized package
-    def ReadDataStructure(self, ParentPackage, ikey, ivalue, ReqFlag):
+    def ReadDataStructure(self, ParentPackage, ikey, ivalue, ReqFlag, HigherLevelComp = None):
         """
 
-        ReadDataStructure(self, ParentPackage, ikey, ivalue, ReqFlag)
+        ReadDataStructure(self, ParentPackage, ikey, ivalue, ReqFlag, HigherLevelComp = None)
 
         Read the data structure within a JSON string and process it accordingly by finding the appropriate package to add data.
 
         INPUTS:
-            self         : the SysML model
+            self           : the SysML model
 
-            ParentPackage: the higher-level package that contains packages for checking
+            ParentPackage  : the higher-level package that contains packages for checking
 
-            ikey         : the reserved word that creates a special package
+            ikey           : the reserved word that creates a special package
 
-            ivalue       : the model element to be created in the package
+            ivalue         : the model element to be created in the package
 
-            ReqFlag      : flag to indicate whether a requirement should be made (1) or not (0)
+            ReqFlag        : flag to indicate whether a requirement should be made (1) or not (0)
+
+            HigherLevelComp: (optional, defaults to None) the higher level component for creating part properties
 
         OUTPUTS:
             none
 
         """
-       
+
         # check if it is a requirement, performance, or behavior block
         if (ikey == "requirements"):
 
@@ -1676,7 +1713,7 @@ class ModelStructureGenerator():
                 FoundPackage = 1
                 
                 # read the data as a parameter
-                Children[ichild] = self.ReadData(Children[ichild], ikey, ivalue, ReqFlag)
+                Children[ichild] = self.ReadData(Children[ichild], ikey, ivalue, ReqFlag, HigherLevelComp)
                 
                 # break out of the loop
                 break
@@ -1688,7 +1725,7 @@ class ModelStructureGenerator():
         if (FoundPackage == 0):
             
             # we must be at the highest level, so create a new block for it
-            ParentPackage = self.ReadData(ParentPackage, ikey, ivalue, ReqFlag)
+            ParentPackage = self.ReadData(ParentPackage, ikey, ivalue, ReqFlag, HigherLevelComp)
             
         # end if
         

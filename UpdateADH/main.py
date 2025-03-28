@@ -13,7 +13,7 @@ UPDATE ADH:
 
 Written by Paul Mokotoff, prmoko@umich.edu
 
-Last Updated: 21 Mar 2025
+Last Updated: 28 Mar 2025
 
 Inputs:
 
@@ -39,6 +39,12 @@ Outputs:
 # -----------------------------------------------------------
 # -----------------------------------------------------------
 
+###############################
+#                             #
+# IMPORTS                     #
+#                             #
+###############################
+
 # import magicdraw packages
 import com.nomagic.magicdraw.actions.ActionsConfiguratorsManager     as ACM
 import com.nomagic.magicdraw.actions.BrowserContextAMConfigurator    as BCAMC
@@ -52,8 +58,6 @@ import com.nomagic.magicdraw.ui.dialogs.MDDialogParentProvider       as MDDPP
 import com.nomagic.magicdraw.uml.BaseElement                         as BaseElement
 import com.nomagic.magicdraw.uml.Finder                              as Finder
 import com.nomagic.uml2.ext.jmi.helpers.StereotypesHelper            as SH
-import com.nomagic.uml2.ext.magicdraw.classes.mdkernel               as MDKernel
-import com.nomagic.uml2.ext.jmi.helpers.CoreHelper                   as CH
 
 # import java packages
 import java.awt.Color     as Color
@@ -376,34 +380,56 @@ class FilenamePanel(JPanel):
     
     # initialize the components
     def initComponents(self):
+        """
 
-        self.MainPanel = JPanel();
-        self.Title = JLabel();
-        self.ObjLabel = JLabel();
-        self.ObjFunInput = JTextField();
-        self.DoneButton = JButton();
+        initComponents(self)
 
+        Function to initalize the components and layout for the ADH file popup
+
+        INPUTS:
+            self: the java panel
+
+        OUTPUTS:
+            none
+
+        """
+
+        # define the components
+        self.MainPanel = JPanel()
+        self.Title = JLabel()
+        self.TextLabel = JLabel()
+        self.FilenameInput = JTextField()
+        self.RunButton = JButton()
+
+        # setup the main panel
         self.MainPanel.setBackground(Color(255, 255, 255))
         self.MainPanel.setBorder(BorderFactory.createLineBorder(Color(0, 0, 0), 4))
         self.MainPanel.setPreferredSize(Dimension(780, 600))
 
+        # setup the title
         self.Title.setBackground(Color(255, 255, 255))
         self.Title.setFont(Font("Times New Roman", 1, 24))
         self.Title.setText("ADH Read/Write/Update")
 
-        self.ObjLabel.setBackground(Color(255, 255, 255))
-        self.ObjLabel.setFont(Font("Times New Roman", 1, 18))
-        self.ObjLabel.setText("Filename (must be in Program Files --- Magic System of Systems Architect folder):")
+        # setup the label below the title
+        self.TextLabel.setBackground(Color(255, 255, 255))
+        self.TextLabel.setFont(Font("Times New Roman", 1, 18))
+        self.TextLabel.setText("Filename (must be in Program Files --- Magic System of Systems Architect folder):")
 
-        self.ObjFunInput.setFont(Font("Times New Roman", 0, 14))
-        self.ObjFunInput.setText("Input filename to be read/written/updated")
+        # setup the filename box
+        self.FilenameInput.setFont(Font("Times New Roman", 0, 14))
+        self.FilenameInput.setText("Input filename to be read/written/updated")
 
-        self.DoneButton.setFont(Font("Times New Roman", 1, 12))
-        self.DoneButton.setText("Run");
-        self.DoneButton.addActionListener(self.DoneListener)
+        # setup the "run" button
+        self.RunButton.setFont(Font("Times New Roman", 1, 12))
+        self.RunButton.setText("Run")
+        self.RunButton.addActionListener(self.DoneListener)
 
-        MainPanelLayout = GroupLayout(self.MainPanel);
-        self.MainPanel.setLayout(MainPanelLayout);
+        # create the main panel layout
+        MainPanelLayout = GroupLayout(self.MainPanel)
+        self.MainPanel.setLayout(MainPanelLayout)
+
+        # arranage horizontally
         MainPanelLayout.setHorizontalGroup( \
             MainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING) \
             .addGroup(MainPanelLayout.createSequentialGroup() \
@@ -412,35 +438,42 @@ class FilenamePanel(JPanel):
                     .addComponent(self.Title, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) \
                     .addGroup(MainPanelLayout.createSequentialGroup() \
                         .addGap(0, 0, Short.MAX_VALUE) \
-                        .addComponent(self.DoneButton)) \
+                        .addComponent(self.RunButton)) \
                     .addGroup(MainPanelLayout.createSequentialGroup() \
-                        .addComponent(self.ObjFunInput, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE) \
+                        .addComponent(self.FilenameInput, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE) \
                         .addGap(0, 0, Short.MAX_VALUE)) \
-                    .addComponent(self.ObjLabel, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)) \
+                    .addComponent(self.TextLabel, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)) \
                 .addContainerGap()) \
         )
+
+        # arrange vertically
         MainPanelLayout.setVerticalGroup( \
             MainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING) \
             .addGroup(MainPanelLayout.createSequentialGroup() \
                 .addContainerGap() \
                 .addComponent(self.Title, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE) \
                 .addGap(18, 18, 18) \
-                .addComponent(self.ObjLabel) \
+                .addComponent(self.TextLabel) \
                 .addPreferredGap(ComponentPlacement.RELATED) \
-                .addComponent(self.ObjFunInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE) \
+                .addComponent(self.FilenameInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE) \
                 .addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE) \
-                .addComponent(self.DoneButton)
+                .addComponent(self.RunButton)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) \
         )
 
-        layout = GroupLayout(self);
-        self.setLayout(layout);
+        # create the overall panel layout
+        layout = GroupLayout(self)
+        self.setLayout(layout)
+
+        # arrange horizontally
         layout.setHorizontalGroup( \
             layout.createParallelGroup(GroupLayout.Alignment.LEADING) \
             .addGroup(layout.createSequentialGroup() \
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) \
                 .addComponent(self.MainPanel, GroupLayout.PREFERRED_SIZE, 746, GroupLayout.PREFERRED_SIZE)) \
         )
+
+        # arrange vertically
         layout.setVerticalGroup( \
             layout.createParallelGroup(GroupLayout.Alignment.LEADING) \
             .addComponent(self.MainPanel, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE) \
@@ -469,7 +502,7 @@ class FilenamePanel(JPanel):
         """
         
         # get the text input
-        Filename = self.ObjFunInput.getText()
+        Filename = self.FilenameInput.getText()
 
         # generate the model structure
         Generator = ModelStructureGenerator()
@@ -487,150 +520,41 @@ class FilenamePanel(JPanel):
 # -----------------------------------------------------------
 # -----------------------------------------------------------
 
-###############################
-#                             #
-# FUNCTION FOR FLATTENING AN  #
-# ARRAY                       #
-#                             #
-###############################
-
-def Flatten(Arr):
-
-    # remember the result
-    result = []
-
-    # define helper function
-    def SubFlatten(SubArr):
-
-        # loop through all subarrays
-        for element in SubArr:
-
-            # check if it's a list
-            if isinstance(element, list):
-
-                # if so, flatten in
-                SubFlatten(element)
-            else:
-
-                # append it to the result
-                result.append(element)
-
-            # end if
-        # end for
-    # end SubFlatten
-
-    # recursively flatten each dimension
-    SubFlatten(Arr)
-
-    # return the flattenened array
-    return result
-
-# end Flatten
-
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-
-###############################
-#                             #
-# FUNCTION FOR GETTING AN     #
-# ARRAY'S SIZE                #
-#                             #
-###############################
-
-def GetShape(Arr):
-
-    # check if the Array is a list
-    if isinstance(Arr, list):
-
-        # get the inner shape recursively
-        InnerShape = GetShape(Arr[0])
-
-        # return the recursively called shape
-        return (len(Arr),) + InnerShape if InnerShape else (len(Arr),)
-
-    # end if
-
-    # return nothing if it's not a list
-    return ()
-
-# end GetShape
-
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-
-###############################
-#                             #
-# FUNCTION FOR RETURNING ALL  #
-# NAMES OF ARRAY ELEMENTS FOR #
-# AN N-DIMENSIONAL ARRAY      #
-#                             #
-###############################
-
-def WriteIndices(Name, *Shapes):
-
-    # create an array of ranges for each dimension
-    Indices = [list(range(s)) for s in Shapes]
-
-    # initialize an index tuple to track current positions
-    CurIndex = [0] * len(Shapes)
-
-    # iterate until breaking out down below
-    while True:
-        
-        # remember the string "prefix"
-        OutString = Name
-
-        # get the number of array dimensions
-        nshape = len(Shapes)
-
-        # loop through the array dimensions
-        for ishape in range(nshape):
-
-            # append a "dunder" (double underscore) and the next dimension's index
-            OutString += "__" + str(CurIndex[ishape])
-
-        # end for
-
-        # yield the current string
-        yield OutString
-        
-        # start incrementing from the last dimension
-        for idim in reversed(range(len(Shapes))):
-
-            # increment the dimension
-            CurIndex[idim] += 1
-
-            # check for overflow
-            if (CurIndex[idim] < Shapes[idim]):
-
-                # break out of the loop
-                break
-            
-            else:
-                
-                # reset current dimension and carry over to the next
-                CurIndex[idim] = 0
-                
-        else:
-            
-            # stop generating results
-            return
-
-        # end for
-    # end while
-# end WriteIndices
-
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-
 def ReshapeArray(Arr, NewShape):
+    """
 
+    ReshapeArray(Arr, NewShape)
+
+    Function to change the shape of an array into a new one for processing.
+
+    INPUTS:
+        Arr     : the current array
+
+        NewShape: a tuple representing the shape of the new array to be returned
+
+    OUTPUTS:
+        the new array after being reshaped
+
+    """
+    
     # helper function to recursively construct the reShaped array
     def ConstructNewShape(Arr, Shape):
+        """
 
+        ConstructNewShape(Arr, Shape)
+
+        Helper function to take parts of an array and put them together to make a larger array.
+
+        INPUTS:
+            Arr  : the current array
+
+            Shape: a tuple describing the desired shape of the array
+
+        OUTPUTS:
+            pieces of the newly shaped array, one dimension at a time
+
+        """
+        
         # check if the shape represents a scalar
         if len(Shape) == 1:
 
@@ -649,6 +573,8 @@ def ReshapeArray(Arr, NewShape):
         # return the new shape recursively
         return [ConstructNewShape(Arr[i * SubArrLength:(i + 1) * SubArrLength], SubShape) for i in range(size)]
 
+    # end ConstructNewShape
+    
     # check that the total number of elements match
     TotalElements = 1
 
@@ -684,6 +610,19 @@ class ModelStructureGenerator():
 
     # initialization
     def __init__(self):
+        """
+
+        __init__(self)
+
+        Initialize the writer, which exports the SysML model.
+
+        INPUTS:
+            self: the SysML model
+
+        OUTPUTS:
+            none
+
+        """
         
         # get the project
         self.Project = Application.getInstance().getProject()
@@ -703,6 +642,23 @@ class ModelStructureGenerator():
 
     # action execution
     def execute(self, ParentPackage, Filename):
+        """
+
+        execute(self, ParentPackage, Filename)
+
+        Extract the model elements from the SysML model and convert their information to a JSON string.
+
+        INPUTS:
+            self         : the SysML model
+
+            ParentPackage: the highest-level model element that the model elements will be stored in
+
+            Filename     : the name of the JSON file to be read for updating the SysML model
+
+        OUTPUTS:
+            none
+
+        """
         
         # try to create a session
         try:
@@ -770,8 +726,6 @@ class ModelStructureGenerator():
 
             # get the parent package name
             ParentPackageName = ParentPackage.getName()
-
-            print("COMPARING DICTIONARIES")
             
             # compare the two dictionaries
             self.CompareDict(MyDict, MyJSON[ParentPackageName], ParentPackageName, "", 0, [None, None])
@@ -1014,7 +968,7 @@ class ModelStructureGenerator():
                             
                                 # get the component name
                                 CompName = ikey + "__" + str(icomp)
-                            
+
                                 # modify the names
                                 NewName = Name + ExtraString
                             
@@ -1030,7 +984,7 @@ class ModelStructureGenerator():
                         val2 = Data2[ikey]
                         
                         # loop through the dictionary contents
-                        for jkey, jval in ival.items():
+                        for jkey in ival.keys():
                             
                             # modify the name
                             NewName = Name + ExtraString
@@ -1163,24 +1117,15 @@ class ModelStructureGenerator():
                 # check the value type
                 if (isinstance(Data2, int)):
                     
-                    # assign the type
-                    MyType = self.Integer
-                    
                     # create the integer
                     MyValueInst = self.Factory.createLiteralIntegerInstance()
                     
                 elif (isinstance(Data2, float)):
-                    
-                    # assign the type
-                    MyType = self.Real
-                    
+                                        
                     # create the real
                     MyValueInst = self.Factory.createLiteralRealInstance()
                     
                 elif (isinstance(Data2, unicode)) or (isinstance(Data2, str)):
-                    
-                    # assign the type
-                    MyType = self.String
                     
                     # create the string
                     MyValueInst = self.Factory.createLiteralStringInstance()
@@ -1207,18 +1152,31 @@ class ModelStructureGenerator():
                     
                     # get the prior dictionary
                     TempDict = LastDict[1]
+
+                    # try to look for the requirement in different parts
+                    try:
+                        
+                        # get the name, description, and value
+                        TempName = TempDict["name"]
+                        TempDesc = TempDict["description"]
+                        TempValu = TempDict["value"]
+                        
+                        # get the actual value and units                        
+                        FinalValue = TempValu["value"]
+                        FinalUnits = TempValu["units"]
                     
-                    # get the name, description, and value
-                    TempName = TempDict["name"]
-                    TempDesc = TempDict["description"]
-                    TempValu = TempDict["value"]
-                    
-                    # get the actual value and units                        
-                    FinalValue = TempValu["value"]
-                    FinalUnits = TempValu["units"]
-                    
-                    # change the whole requirement
-                    SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+                        # change the whole requirement
+                        SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+
+                    except:
+
+                        # get the text only
+                        TempText = TempDict["text"]
+
+                        # change the whole requirement
+                        SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", TempText)
+
+                    # end try-except
                     
                 except:
                     
@@ -1226,20 +1184,32 @@ class ModelStructureGenerator():
                         
                         # get two dictionaries prior
                         TempDict = LastDict[0]
+
+                        try:
+                            
+                            # get the name and description
+                            TempName = TempDict["name"]
+                            TempDesc = TempDict["description"]
                         
-                        # get the name and description
-                        TempName = TempDict["name"]
-                        TempDesc = TempDict["description"]
-                        
-                        # get the value and units from the more recent dictionary
-                        TempDict = LastDict[1]
-                        
-                        # get the value and units
-                        FinalValue = TempDict["value"]
-                        FinalUnits = TempDict["units"]
-                        
-                        # change the whole requirement
-                        SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+                            # get the value and units from the more recent dictionary
+                            TempDict = LastDict[1]
+                            
+                            # get the value and units
+                            FinalValue = TempDict["value"]
+                            FinalUnits = TempDict["units"]
+                            
+                            # change the whole requirement
+                            SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
+
+                        except:
+
+                            # get the text only
+                            TempText = TempDict["text"]
+
+                            # change the whole requirement
+                            SH.setStereotypePropertyValue(MyEntity, self.ReqSter, "Text", TempText)
+
+                        # end try-except
                         
                     except:
                         
@@ -1258,795 +1228,26 @@ class ModelStructureGenerator():
         # end if
         
     # end CorrectValue
-
-    # -------------------------------------------------------
-
-    def GetData(self, MyJSON, ParentPackage, ReqSterFlag, HigherLevelComp = None):
-
-        try:                
-            
-            # loop through each of the items at this level
-            for ikey, ivalue in MyJSON.items():
-                
-                # assume it is a floating value
-                DataType = 0
-                
-                # check if the value is a dictionary
-                if (isinstance(ivalue, dict)):
-                    
-                    # it is a block with additional data inside of it
-                    DataType = -1
-                    
-                    # check if the value has a WBS number
-                    try:
-                        if ("wbs_no" in ivalue.keys()):
-                            
-                            # then, it is a component that can have folders
-                            DataType = +1
-                            
-                            # end if
-                            
-                    except:
-                        
-                        # do nothing
-                        pass
-                    
-                    # end try-except
-            
-                # end if
-
-                # check if the data is a list
-                if (isinstance(ivalue, list)):
-
-                    # it is an array that must be opened up
-                    DataType = +2
-
-                # end if
-
-                # check for keywords
-                if (ikey == "components") or (ikey == "requirements") or (ikey == "performance") or (ikey == "behavior"):
-
-                    # open up the data type
-                    DataType = +2
-
-                # end if
-                    
-                # check how data must be handlded
-                if (DataType == 0):
-                    
-                    # we want the package above for storing floating point values
-                    Parent = ParentPackage.getOwner()
-                    
-                    # read the floating parameter
-                    self.ReadFloatingValue(Parent, ikey, ivalue)
-                    
-                elif (DataType == -1):
-                    
-                    # read a data structure
-                    self.ReadDataStructure(ParentPackage, ikey, ivalue, ReqSterFlag)
-                    
-                elif (DataType == +1):
-                    
-                    # create a new package and (possibly) set of folders
-                    MainPackage = self.CreatePackage(ikey)
-                    
-                    # set the owner of the package to be the parent
-                    MainPackage.setOwner(ParentPackage)
-
-                    # create an instance of the component as normal
-                    ComponentClass = self.CreateInstance(ikey, ReqSterFlag)
-
-                    # set the owner of the class to be the package just created
-                    ComponentClass.setOwner(MainPackage)
-                    
-                    # check if the stereotype must be added
-                    if (self.ProfileFlag == 0):
-                            
-                        # get the stereotype
-                        Stereotype = SH.getStereotype(self.Project, ikey, self.Profile)
-
-                        # check if it's non-existant
-                        if (Stereotype == None):
-
-                            # get the value
-                            TempValue = MyJSON[ikey]
-                                  
-                            # now, look for the name
-                            TempName = TempValue["name"]
-
-                            # now, try getting the stereotype
-                            Stereotype = SH.getStereotype(self.Project, TempName, self.Profile)
-
-                        # end if
-
-                        # check if the stereotype exists
-                        if (Stereotype != None):
-
-                            # if so, add the stereotype
-                            SH.addStereotype(ComponentClass, Stereotype)
-                            
-                        # end if
-
-                    # end if
-                    
-                    # create the necessary folders
-                    self.MakeFolders(ivalue, MainPackage)
-                    
-                    # get the children of the main package
-                    Children = MainPackage.getOwnedElement()
-                
-                    # assume that the parent is the main package
-                    Parent = MainPackage
-                    
-                    # loop through all the children
-                    for ichild in Children:
-                        
-                        # get the name of the child
-                        Name = ichild.getHumanName()
-                        
-                        # check if it is the architecture package
-                        if (Name == "Package Architecture"):
-                            
-                            # update the parent
-                            Parent = ichild
-                            
-                            # break out of the loop
-                            break
-                        
-                        # end if
-                    # end for
-
-                    # check if there's a higher-level component for decomposition relation
-                    if (HigherLevelComp != None):
-
-                        # create a relation
-                        Decomp = self.Factory.createAssociationInstance()
-
-                        # set the supplier and client elements
-                        CH.setSupplierElement(Decomp, ComponentClass)
-                        CH.setClientElement(Decomp, HigherLevelComp)
-
-                        # get the ends of the relation
-                        Members = Decomp.getMemberEnd()
-
-                        # get the supplier end
-                        SupplierEnd = Members[1]
-
-                        # set it as a decomposition
-                        SupplierEnd.setAggregation(MDKernel.AggregationKindEnum.COMPOSITE)
-
-                        # get the parent of the higher level component
-                        OwnerParent = HigherLevelComp.getOwner()
-
-                        # add the dependency to the package
-                        self.Manager.addElement(Decomp, OwnerParent)
-
-                    # end if
-                    
-                    # explore the next level of the component
-                    self.GetData(ivalue, Parent, ReqSterFlag, ComponentClass)
-                    
-                elif (DataType == +2):
-
-                    # assume not a requirement
-                    ReqSterFlag = 0
-                    
-                    # get the appropriate target name
-                    if (ikey == "requirements"):
-
-                        # provide the target name
-                        TargetName = "Package Requirements"
-
-                        # the parent pacakage is the higher-level package
-                        Parent = ParentPackage.getOwner()
-
-                        # flag that we're dealing with a requirement
-                        ReqSterFlag = 1
-
-                    elif (ikey == "performance"):
-
-                        # provide the target name
-                        TargetName = "Package Performance"
-
-                        # the parent pacakage is the higher-level package
-                        Parent = ParentPackage.getOwner()
-
-                    elif (ikey == "behavior"):
-
-                        # provide the target name
-                        TargetName = "Package Behavior"
-
-                        # the parent pacakage is the higher-level package
-                        Parent = ParentPackage.getOwner()
-
-                    else:
-
-                        # provide the target name
-                        TargetName = "Package Architecture"
-
-                        # the parent package remains the same
-                        Parent = ParentPackage
-
-                    # end if
-                                            
-                    # get the children of the main package
-                    Children = Parent.getOwnedElement()
-                    
-                    # loop through all of the children
-                    for ichild in Children:
-                        
-                        # get the name of the child
-                        Name = ichild.getHumanName()
-                        
-                        # check if it matches the architecture folder
-                        if (Name == TargetName):
-                            
-                            # remember this as the parent package
-                            Parent = ichild
-                            
-                            # break out of the loop
-                            break
-                        
-                        # end if
-                    # end for
-                    
-                    # check if the value is a list
-                    if (isinstance(ivalue, list)):
-
-                        # check for a nonzero-length list
-                        if (len(ivalue) > 0):
-                            
-                            # loop through each of the components
-                            for icomp in range(len(ivalue)):
-
-                                # create the name
-                                CompName = ikey + "__" + str(icomp)
-                                                
-                                # read each component separately
-                                self.GetData({CompName : ivalue[icomp]}, Parent, ReqSterFlag, HigherLevelComp)
-                            
-                            # end for
-                        # end if
-                        
-                    else:
-
-                        # loop through the contents of the dictionary
-                        for jkey, jvalue in ivalue.items():
-            
-                            # there is only one element, no loops or lists needed
-                            self.GetData({jkey : jvalue}, Parent, ReqSterFlag, HigherLevelComp)
-
-                        # end for
-                        
-                    # end if
-                    
-                else:
-                    
-                    # throw an error
-                    print("ERROR - GetData: Invalid DataType selected.")
-                    
-                    # break out of the loop for now
-                    break
-                
-                # end if    
-            # end for
-
-        except Exception as e:
-
-            print("Bad: " + repr(MyJSON) + "\n")
-            print("Exception: " + repr(e))
-
-        # end try-except
-
-    # end GetData
-
-    # -------------------------------------------------------
-
-    def CreatePackage(self, Name):
-
-        # create a package
-        NewPackage = self.Factory.createPackageInstance()
-
-        # set the name
-        NewPackage.setName(Name)
-
-        # return the package
-        return NewPackage
-
-    # end CreatePackage
-
-    # -------------------------------------------------------
-
-    def CreateInstance(self, Name, ReqFlag = 0):
-
-        # create an instance
-        NewClass = self.Factory.createClassInstance()
-
-        if (ReqFlag == 1):
-
-            # represent it as a requirement
-            SH.addStereotype(NewClass, self.ReqSter)
-
-        else:
-            
-            # represent it as a block
-            SH.addStereotype(NewClass, self.BlockSter)
-
-        # end if
-
-        # set the name
-        NewClass.setName(Name)
-
-        # return the new class
-        return NewClass
-
-    # end CreateInstance
-
-    # -------------------------------------------------------
-
-    def ReadData(self, Block, Key, Value, ReqFlag):
-        
-        # check if the value is a list
-        if (not isinstance(Value, list)):
-
-            # make it a list
-            Value = [Value]
-
-        # end if
-
-        # check that the list has a length
-        if (len(Value) > 0):
-            
-            # get the shape of the list
-            MyShape = GetShape(Value)
-
-            # get all of the names of entries
-            MyNames = WriteIndices(Key, *MyShape)
-            
-            # flatten the array
-            FlattenedValue = Flatten(Value)
-            
-            # assume one element
-            nelem = 1
-            
-            for idim in MyShape:
-                nelem *= idim
-                
-            # set a counter
-            ielem = 0
-            
-            # loop through each item
-            for iname in MyNames:
-                
-                # rename the key to have individual blocks, if needed
-                if (nelem > 1):
-                    
-                    # update the key to account for multiple items
-                    NewKey = iname
-                    
-                else:
-                    
-                    # keep the same key
-                    NewKey = Key
-                    
-                # end if
-
-                # get the current element
-                CurVal = FlattenedValue[ielem]
-            
-                # check for a dictionary
-                if (isinstance(CurVal, dict)):
-                    
-                    # create a block
-                    NewBlock = self.CreateInstance(NewKey, ReqFlag)
-                    
-                    # set the owner to be the parent
-                    NewBlock.setOwner(Block)
-                    
-                    # check for a requirement
-                    if (ReqFlag == 1):
-                        
-                        # get the name, desription, and value
-                        TempName = CurVal["name"]
-                        TempDesc = CurVal["description"]
-                        TempValu = CurVal["value"]
-                        
-                        # extract the actual value and units
-                        FinalValue = TempValu["value"]
-                        FinalUnits = TempValu["units"]
-                        
-                        # set the requirement text
-                        SH.setStereotypePropertyValue(NewBlock, self.ReqSter, "Text", "(" + TempName + "): " + TempDesc + " shall be " + str(FinalValue) + " " + FinalUnits)
-                        
-                    else:
-                        
-                        # check that it is not empty
-                        try:
-                            
-                            # read the dictionary
-                            for key, value in CurVal.items():
-                                
-                                # get the data for each of the items
-                                self.ReadData(NewBlock, key, value, ReqFlag)
-                                
-                            # end for
-                            
-                        except:
-                            
-                            # do nothing
-                            pass
-                        
-                        # end try-except
-
-                    # end if
-                    
-                else:
-
-                    # create the value property
-                    Block = self.CreateProperty(Block, NewKey, CurVal)
-
-                # end if
-                    
-                # increment the element count
-                ielem += 1
-            
-            # end for
-
-        else:
-
-            # create an property
-            Block = self.CreateProperty(Block, Key, None)
-
-        # end if
-        
-        # return the block
-        return Block
-        
-    # end ReadData
-
-    # -------------------------------------------------------
-
-    def CreateProperty(self, Block, Key, Value):
-        
-        # check the value type
-        if isinstance(Value, bool):
-
-            # assign the type
-            MyType = self.Boolean
-
-            # create the boolean
-            MyValueInst = self.Factory.createLiteralBooleanInstance()
-            
-        elif isinstance(Value, int):
-            
-            # assign the type
-            MyType = self.Integer
-            
-            # create the integer
-            MyValueInst = self.Factory.createLiteralIntegerInstance()
-            
-        elif isinstance(Value, float):
-            
-            # assign the type
-            MyType = self.Real
-            
-            # create the real
-            MyValueInst = self.Factory.createLiteralRealInstance()
-            
-        elif isinstance(Value, unicode) or isinstance(Value, str):
-            
-            # assign the type
-            MyType = self.String
-            
-            # create the string
-            MyValueInst = self.Factory.createLiteralStringInstance()
-
-        elif Value is None:
-
-            # no type needed
-            MyType = None
-
-            # create a null instance
-            MyValueInst = self.Factory.createLiteralNullInstance()
-            
-        else:
-            
-            # print a warning that the type is not known
-            print("WARNING: the type for " + repr(Key) + " is not known ... not creating value property.")
-            
-            # don't proceed
-            return Block
-        
-        # end if
-
-        # check that the value exists
-        if (Value is not None):
-            
-            # set the value
-            MyValueInst.setValue(Value)
-
-        # end if
-        
-        # create a value property
-        NewProperty = self.Factory.createPropertyInstance()
-        
-        # set the property name
-        NewProperty.setName(Key)
-
-        # check if the type exists
-        if (MyType is not None):
-            
-            # set the property type
-            NewProperty.setType(MyType)
-
-        # end if
-        
-        # set the value
-        NewProperty.setDefaultValue(MyValueInst)
-        
-        # add the property to the block
-        self.Manager.addElement(NewProperty, Block)
-
-        # return the Block
-        return Block
-        
-    # end CreateProperty
-
-    # -------------------------------------------------------
-
-    def AddStereotype(self, Block, Name):
-        
-        # get the stereotype
-        MyStereotype = SH.getStereotype(self.Project, Name, self.Profile)
-        
-        # check if the stereotype exists
-        if (MyStereotype is not None):
-
-            # apply the stereotype
-            SH.addStereotype(Block, MyStereotype)
-
-        # end if
-
-        # return the block
-        return Block
-
-    # end AddStereotype
-
-    # -------------------------------------------------------
-
-    def ReadFloatingValue(self, ParentPackage, ikey, ivalue):
-
-        # get the children of the parent package
-        Children = ParentPackage.getOwnedElement()
-    
-        # assume the block isn't found
-        FoundBlock = 0
-        
-        # loop through all children until we reach a block
-        for ichild in range(len(Children)):                   
-            
-            # get the child's stereotype
-            Stereotype = Children[ichild].getAppliedStereotype()
-            
-            # loop through all stereotypes
-            for itype in Stereotype:
-                
-                # get the stereotype name
-                SterName = str(itype.getName())
-                
-                # if it's a block, stop
-                if (SterName == "Block"):
-                    
-                    # read the data as a parameter
-                    Children[ichild] = self.ReadData(Children[ichild], ikey, ivalue, 0)
-                    
-                    # flag for finding the block
-                    FoundBlock = 1
-                    
-                    # break out of the loop
-                    break
-                
-                # end if
-                
-            # end for
-            
-            # break out if the block was found
-            if (FoundBlock == 1):
-                break
-            # end if
-            
-        # end for
-
-    # end ReadFloatingValue
-    
-    # -------------------------------------------------------
-
-    def ReadDataStructure(self, ParentPackage, ikey, ivalue, ReqFlag):
-       
-        # check if it is a requirement, performance, or behavior block
-        if (ikey == "requirements"):
-
-            # place the information in the requirements package
-            TargetName = "Package Requirements"
-
-        elif (ikey == "performance"):
-
-            # place the information in the performance package
-            TargetName = "Package Performance"
-
-        elif (ikey == "behavior"):
-
-            # place the information in the behavior package
-            TargetName = "Package Behavior"
-
-        else:
-
-            # place the information in the architecture package
-            TargetName = "Package Architecture"
-
-        # end if
-        
-        # get the children of the parent package
-        Children = ParentPackage.getOwnedElement()
-        
-        # flag for finding the architecture package
-        FoundPackage = 0
-        
-        # loop through all children until we reach a block
-        for ichild in range(len(Children)):
-            
-            # get the child's stereotype
-            Name = Children[ichild].getHumanName()
-            
-            # check for the appropriate name
-            if (Name == TargetName):
-                
-                # flag that the package was found
-                FoundPackage = 1
-                
-                # read the data as a parameter
-                Children[ichild] = self.ReadData(Children[ichild], ikey, ivalue, ReqFlag)
-                
-                # break out of the loop
-                break
-            
-            # end if                    
-        # end for
-        
-        # check that a package was found
-        if (FoundPackage == 0):
-            
-            # we must be at the highest level, so create a new block for it
-            ParentPackage = self.ReadData(ParentPackage, ikey, ivalue, ReqFlag)
-            
-        # end if
-        
-    # end ReadDataStructure
-    
-    # -------------------------------------------------------
-
-    def MakeFolders(self, ivalue, MainPackage):
-        
-        # assume no packages need to be made
-        NeedArch = 0
-        NeedReqs = 0
-        NeedPerf = 0
-        NeedBhav = 0
-
-        try:
-            
-            # loop through all of the keys
-            for jkey in ivalue.keys():
-                
-                # check if the key indicates components are present
-                if (jkey == "components"):
-                    
-                    # an architecture package must be created
-                    NeedArch = 1
-                    
-                    # continue on in the loop
-                    continue
-                
-                # end if
-                
-                # check if the key indicates requirements are present
-                if (jkey == "requirements"):
-                    
-                    # a requirements package must be created
-                    NeedReqs = 1
-                    
-                    # continue on in the loop
-                    continue
-                
-                # end if
-                
-                # check if the key indicates performance information is present
-                if (jkey == "performance"):
-                    
-                    # a performance package must be created
-                    NeedPerf = 1
-                    
-                    # continue on in the loop
-                    continue
-                
-                # end if
-                
-                # check if the key indicates behaviors are present
-                if (jkey == "behavior"):
-                    
-                    # a behavior package must be created
-                    NeedBhav = 1
-                    
-                    # continue on in the loop
-                    continue
-                
-                # end if
-                
-                # check if it is another reserved word
-                if ((jkey != "wbs_no") and (jkey != "name") and (jkey != "description")):
-                    
-                    # create an architecture folder
-                    NeedArch = 1
-                    
-                # end if
-            # end for
-            
-            # check if an architecture package must be made
-            if (NeedArch == 1):
-                
-                # create the architecture package
-                ArchPackage = self.CreatePackage("Architecture")
-                
-                # set the owner to be the main package
-                ArchPackage.setOwner(MainPackage)
-                
-            # end if
-            
-            # check if a requirements package must be made
-            if (NeedReqs == 1):
-                
-                # create the requirements package
-                ReqsPackage = self.CreatePackage("Requirements")
-                
-                # set the owner to be the main package
-                ReqsPackage.setOwner(MainPackage)
-                
-            # end if
-            
-            # check if a performance package must be made
-            if (NeedPerf == 1):
-                
-                # create the performance package
-                PerfPackage = self.CreatePackage("Performance")
-                
-                # set the owner to be the main package
-                PerfPackage.setOwner(MainPackage)
-                
-            # end if
-        
-            # check if a behavior package must be made
-            if (NeedBhav == 1):
-                
-                # create the behavior package
-                BhavPackage = self.CreatePackage("Behavior")
-                
-                # set the owner to be the main package
-                BhavPackage.setOwner(MainPackage)
-                
-            # end if
-
-        except:
-
-            pass
-
-        # end try-except
-
-    # end MakeFolders
     
     # -------------------------------------------------------
 
     def GetBlock(self, ParentBlock):
+        """
 
+        GetBlock(self, ParentBlock)
+
+        Get the JSON string associated with a block and its owned model elements.
+
+        INPUTS:
+            self       : the SysML model
+
+            ParentBlock: the block whose children will be searched
+
+        OUTPUTS:
+            MySysDict  : dictionary to be converted to a JSON string
+
+        """
+        
         # create empty dictionary
         MySysDict = {}
 
@@ -2063,10 +1264,19 @@ class ModelStructureGenerator():
 
         # end if
 
-        # isolate the model entity type and name
-        TypeName = str(TempName.split(" ")[0])
-        CompName = str(TempName.split(" ")[1])
+        try:
+            
+            # isolate the model entity type and name (applicable for blocks, packages, and requirements)
+            TypeName = str(TempName.split(" ")[0])
+            CompName = str(TempName.split(" ")[1])
 
+        except:
+
+            # not a valid block
+            return MySysDict
+
+        # end if
+        
         # check for a block or package
         if (TypeName == "Block"):
 
@@ -2086,22 +1296,15 @@ class ModelStructureGenerator():
         else:
 
             # pass for now
-            BlockType = -1
+            return MySysDict
 
-        # end if
-
-        print("TempName = " + repr(TempName) + ", BlockType = " + repr(BlockType))
-
+        # end if        
+       
         # check if a valid block was selected
         if (BlockType > 0):
             
             # get the children of the current model
             MyChildren = ParentBlock.getOwnedElement()
-
-        else:
-
-            # not a valid block
-            return MySysDict
 
         # end if
 
@@ -2119,6 +1322,17 @@ class ModelStructureGenerator():
                 
                 # get the block name
                 BlockName = MyChildren[ichild].getName()
+
+                # get the human name of the block
+                HumanName = MyChildren[ichild].getHumanName()
+            
+                # check if the part property exists
+                if ("Part Property" in HumanName):
+
+                    # skip over it
+                    continue
+
+                # end if
                 
                 # check if a double underscore exists
                 HasUnder = BlockName.find("__")
@@ -2134,7 +1348,7 @@ class ModelStructureGenerator():
 
                         # remember the indices
                         Indices = BlockName.split("__")[1:]
-                    
+                 
                         # change each index to an integer (and add 1 for reshaping)
                         for ival in range(len(Indices)):
                             
@@ -2153,7 +1367,7 @@ class ModelStructureGenerator():
                         
                         # check if another array already exists
                         if (UseArray == 1):
-
+                            
                             # increment the indices by 1
                             for ival in range(len(IntIndices)):
                                 IntIndices[ival] += 1
@@ -2162,19 +1376,19 @@ class ModelStructureGenerator():
                             # reshape the temporary array
                             FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                            # reset the integer indices
+                            # reset indices
                             for ival in range(len(IntIndices)):
                                 IntIndices[ival] = 0
                             # end for
 
                             # write out the first array
                             MySysDict.update({str(OldBaseString) : FinalArray})
-                            
-                        else:
-                            
-                            # start using the array
-                            UseArray = 1
 
+                        else:
+
+                            # begin using the array
+                            UseArray = 1
+                            
                         # end if
 
                         # remember the indices
@@ -2190,7 +1404,7 @@ class ModelStructureGenerator():
                             IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
                             
                         # end for
-                            
+                        
                         # remember the new string
                         OldBaseString = NewBaseString
                         
@@ -2215,7 +1429,7 @@ class ModelStructureGenerator():
                         # reshape the temporary array
                         FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                        # reset the integer indices
+                        # reset indices
                         for ival in range(len(IntIndices)):
                             IntIndices[ival] = 0
                         # end for
@@ -2238,9 +1452,19 @@ class ModelStructureGenerator():
                         MyValu = str(MyValu)
 
                     # end if
-                    
-                    # add the element as normal
-                    MySysDict.update({str(BlockName) : MyValu})
+
+                    # check that the element exists
+                    if (str(BlockName) == "") and (MyValu == {} or MyValu == []):
+
+                        # do nothing
+                        pass
+
+                    else:
+                        
+                        # add the element as normal
+                        MySysDict.update({str(BlockName) : MyValu})
+
+                    # end if
                     
                 # end if
             # end for
@@ -2256,7 +1480,7 @@ class ModelStructureGenerator():
                 # reshape the temporary array
                 FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                # reset the integer indices
+                # reset indices
                 for ival in range(len(IntIndices)):
                     IntIndices[ival] = 0
                 # end for
@@ -2371,7 +1595,7 @@ class ModelStructureGenerator():
                                     # reshape the temporary array
                                     FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                                    # reset the integer indices
+                                    # reset indices
                                     for ival in range(len(IntIndices)):
                                         IntIndices[ival] = 0
                                     # end for
@@ -2383,20 +1607,20 @@ class ModelStructureGenerator():
 
                                     # strt using the array
                                     UseArray = 1
-
+                                    
                                 # end if
 
                                 # remember the indices
                                 Indices = ChildName.split("__")[1:]
-                                
+
                                 # create a list for the actual indices
                                 IntIndices = [0] * len(Indices)
-                                
+
                                 # change each index to an integer
                                 for ival in range(len(Indices)):
                                     IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
                                 # end for
-                                
+
                                 # remember the new string
                                 OldBaseString = NewBaseString
 
@@ -2421,7 +1645,7 @@ class ModelStructureGenerator():
                                 # reshape the temporary array
                                 FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                                # reset the integer indices
+                                # reset indices
                                 for ival in range(len(IntIndices)):
                                     IntIndices[ival] = 0
                                 # end for
@@ -2445,8 +1669,18 @@ class ModelStructureGenerator():
 
                             # end if
 
-                            # add the element as normal
-                            TempDict.update({str(ChildName) : MyValue})
+                            # check if the result isn't empty
+                            if (str(ChildName) == "") and (MyValue == {} or MyValue == []):
+
+                                # do nothing
+                                pass
+
+                            else:
+                                
+                                # add the element as normal
+                                TempDict.update({str(ChildName) : MyValue})
+
+                            # end if
 
                         # end if
                     # end for
@@ -2462,11 +1696,11 @@ class ModelStructureGenerator():
                         # reshape the temporary array
                         FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                        # reset the integer indices
+                        # reset indices
                         for ival in range(len(IntIndices)):
                             IntIndices[ival] = 0
                         # end for
-                        
+                            
                         # turn off the flag
                         UseArray = 0
                         
@@ -2542,7 +1776,7 @@ class ModelStructureGenerator():
                                     # reshape the temporary array
                                     FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                                    # reset the integer indices
+                                    # reset indices
                                     for ival in range(len(IntIndices)):
                                         IntIndices[ival] = 0
                                     # end for
@@ -2554,19 +1788,20 @@ class ModelStructureGenerator():
 
                                     # start using the array
                                     UseArray = 1
-
-                                    # remember the indices
-                                    Indices = ChildName.split("__")[1:]
-
-                                    # create a list for the actual indices
-                                    IntIndices = [0] * len(Indices)
-
-                                    # change each index to an integer
-                                    for ival in range(len(Indices)):
-                                        IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
-                                    # end for
+                                    
                                 # end if
 
+                                # remember the indices
+                                Indices = ChildName.split("__")[1:]
+                                
+                                # create a list for the actual indices
+                                IntIndices = [0] * len(Indices)
+                                
+                                # change each index to an integer
+                                for ival in range(len(Indices)):
+                                    IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
+                                # end for
+                                
                                 # remember the new string
                                 OldBaseString = NewBaseString
 
@@ -2591,11 +1826,11 @@ class ModelStructureGenerator():
                                 # reshape the temporary array
                                 FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                                # reset the integer indices
+                                # reset indices
                                 for ival in range(len(IntIndices)):
                                     IntIndices[ival] = 0
                                 # end for
-                                
+
                                 # write out the array
                                 LocalDict.update({str(OldBaseString) : FinalArray})
 
@@ -2612,9 +1847,18 @@ class ModelStructureGenerator():
                                 MyValue = str(MyValue)
                             # end if
 
-                            # add them to the current dictionary
-                            LocalDict.update({str(ChildName) : MyValue})
+                            # check if the dictionary should be updated
+                            if (str(ChildName) == "") and (MyValue == {} or MyValue == []):
 
+                                # do nothing
+                                pass
+
+                            else:
+                                
+                                # add them to the current dictionary
+                                LocalDict.update({str(ChildName) : MyValue})
+
+                            # end if
                         # end if
                     # end for
 
@@ -2629,7 +1873,7 @@ class ModelStructureGenerator():
                         # reshape the temporary array
                         FinalArray = ReshapeArray(TempArray, IntIndices)
 
-                        # reset the integer indices
+                        # reset indices
                         for ival in range(len(IntIndices)):
                             IntIndices[ival] = 0
                         # end for
@@ -2686,25 +1930,51 @@ class ModelStructureGenerator():
             # get the requirement text
             MyReq = SH.getStereotypePropertyFirst(ParentBlock, self.ReqSter, "Text")
 
-            # split the string into parts
-            StringParts = MyReq.split(" ")
-
-            # get the value and units
-            MyVals = float(StringParts[-2])
-            MyUnit = StringParts[-1]
-
-            # get the description
-            MyDesc = MyReq.split(" shall be ")[0]
-            MyDesc = MyDesc.split(": ")[1]
-
-            # get the name
-            MyName = MyReq.split("):")[0]
+            # assume the requirement isn't available
+            HasReq = 0
             
-            # update the existing dictionary
-            MySysDict.update({"name" : MyName[1:]})
-            MySysDict.update({"description" : MyDesc})
-            MySysDict.update({"value" : {"value" : MyVals, "units" : str(MyUnit)}})
-            
+            # check to see if the requirement has a special set of characters
+            if ("):" in MyReq):
+
+                try:
+                    
+                    # split the string into parts
+                    StringParts = MyReq.split(" ")
+                    
+                    # get the value and units
+                    MyVals = float(StringParts[-2])
+                    MyUnit = StringParts[-1]
+                    
+                    # get the description
+                    MyDesc = MyReq.split(" shall be ")[0]
+                    MyDesc = MyDesc.split(": ")[1]
+                    
+                    # get the name
+                    MyName = MyReq.split("):")[0]
+                    
+                    # update the existing dictionary
+                    MySysDict.update({"name" : MyName[1:]})
+                    MySysDict.update({"description" : MyDesc})
+                    MySysDict.update({"value" : {"value" : MyVals, "units" : str(MyUnit)}})
+
+                    # note that the requirement was obtained
+                    HasReq = 1
+
+                except:
+
+                    # do nothing
+                    pass
+
+                # end try-except
+            # end if
+
+            # check if requirement was found
+            if (HasReq == 0):
+
+                # just return a text string instead
+                MySysDict.update({"text" : MyReq})
+
+            # end if
         # end if
         
         # return the dictionary
@@ -2714,7 +1984,22 @@ class ModelStructureGenerator():
 
     # -------------------------------------------------------
 
-    def GetBlockValue(self, Block, ParentBlock = None):
+    def GetBlockValue(self, Block):
+        """
+
+        GetBlockValue(self, Block)
+
+        Look at a single model element and extract information based on its stereotype.
+
+        INPUTS:
+            self       : the SysML model
+
+            Block      : the model element being analyzed
+
+        OUTPUTS:
+            MyValu     : a dictionary to be converted to a JSON string, which contains the information about the model element
+
+        """
         
         # get the element type
         MyStereotype = Block.getAppliedStereotype()
@@ -2727,7 +2012,7 @@ class ModelStructureGenerator():
         
             # loop through all the stereotypes
             for itype in MyStereotype:
-
+                
                 # get the stereotype name and convert to a string
                 foo = str(itype.getName())
                 
@@ -2737,7 +2022,7 @@ class ModelStructureGenerator():
                     # search a level deeper
                     MyValu = self.GetBlock(Block)
                     
-                # check if the stereotype is a value property
+                    # check if the stereotype is a value property
                 elif (foo == "ValueProperty"):
                     
                     # get the value property
@@ -2748,9 +2033,9 @@ class ModelStructureGenerator():
                     
                     # check if the value specification exists
                     if ValSpec is None:
-
+                        
                         # return an empty array
-                        MyValue = []
+                        MyValu = []
                         
                     elif Type == "Literal Boolean":
                         
@@ -2769,7 +2054,7 @@ class ModelStructureGenerator():
 
         else:
 
-            # assume that it is a null property and return an empty array
+            # assume that it is a null property (i.e., an empty value property) and return an empty array
             MyValu = []
 
         # end if
@@ -2797,7 +2082,22 @@ class InterfacePanel(FilenamePanel):
 
     # initialization
     def __init__(self, Element):
+        """
 
+        __init__(self, Element)
+
+        Function to initialize the panel that requests an ADH file name.
+
+        INPUTS:
+            self   : the java panel
+
+            Element: the highest-level model element selected in the system model.
+
+        OUTPUTS:
+            none
+
+        """
+        
         # remember the parent element
         self.MyParentElement = Element
 
@@ -2809,11 +2109,24 @@ class InterfacePanel(FilenamePanel):
 
     # end __init__
 
-
+    # -------------------------------------------------------
     
     # update components
     def updateComponents(self):
+        """
 
+        updateComponents(self)
+
+        Function to update the panel, not used.
+
+        INPUTS:
+            self: the java panel
+
+        OUTPUTS:
+            none
+
+        """
+        
         # do nothing
         pass
 
@@ -2834,7 +2147,24 @@ class FilenameDialog(JDialog):
 
     # initialization
     def __init__(self, Parent, Element):
+        """
 
+        __init__(self, Parent, Element)
+
+        Function to initialize the dialog panel to request an ADH file name.
+
+        INPUTS:
+            self   : the java dialog class
+
+            Parent : the parent container for the dialog box
+
+            Element: the highest-level element in the system model selected by the user
+
+        OUTPUTS:
+            none
+
+        """
+        
         # remember the parent element
         self.MyParentElement = Element
 
@@ -2857,6 +2187,9 @@ class FilenameDialog(JDialog):
         self.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
 
     # end __init__
+
+    # -------------------------------------------------------
+    
 # end FilenameDialog
 
 # -----------------------------------------------------------
@@ -2879,7 +2212,7 @@ try:
 except Exception as e:
     
     # print exception header
-    print "Code run error - UpdateADH with Dialog"
+    print("Code run error - UpdateADH")
     
     # print the exception
     print(e)

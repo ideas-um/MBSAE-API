@@ -10,7 +10,7 @@ IMPORT STEREOTYPES:
 
  Written by Paul Mokotoff, prmoko@umich.edu
 
- Last Updated: 21 Mar 2025
+ Last Updated: 28 Mar 2025
 
  Inputs:
 
@@ -694,9 +694,6 @@ class ModelStructureGenerator():
                     
                     # check if there is a name and description
                     if "wbs_no" in value:
-
-                        # get the name
-                        Name = value["name"]
                         
                         # check for a description
                         if "description" in value:

@@ -7,7 +7,7 @@ WRITE ADH:
 
 Written by Paul Mokotoff, prmoko@uich.edu
 
-Last Updated: 21 Mar 2025
+Last Updated: 28 Mar 2025
 
 Inputs:
 
@@ -720,10 +720,19 @@ class ADHWriter():
 
         # end if
 
-        # isolate the model entity type and name
-        TypeName = str(TempName.split(" ")[0])
-        CompName = str(TempName.split(" ")[1])
+        try:
+            
+            # isolate the model entity type and name (applicable for blocks, packages, and requirements)
+            TypeName = str(TempName.split(" ")[0])
+            CompName = str(TempName.split(" ")[1])
 
+        except:
+
+            # not a valid block
+            return MySysDict
+
+        # end if
+        
         # check for a block or package
         if (TypeName == "Block"):
 
@@ -743,7 +752,7 @@ class ADHWriter():
         else:
 
             # pass for now
-            BlockType = -1
+            return MySysDict
 
         # end if        
        
@@ -752,11 +761,6 @@ class ADHWriter():
             
             # get the children of the current model
             MyChildren = ParentBlock.getOwnedElement()
-
-        else:
-
-            # not a valid block
-            return MySysDict
 
         # end if
 
@@ -774,6 +778,17 @@ class ADHWriter():
                 
                 # get the block name
                 BlockName = MyChildren[ichild].getName()
+
+                # get the human name of the block
+                HumanName = MyChildren[ichild].getHumanName()
+            
+                # check if the part property exists
+                if ("Part Property" in HumanName):
+
+                    # skip over it
+                    continue
+
+                # end if
                 
                 # check if a double underscore exists
                 HasUnder = BlockName.find("__")
@@ -789,7 +804,7 @@ class ADHWriter():
 
                         # remember the indices
                         Indices = BlockName.split("__")[1:]
-                    
+                 
                         # change each index to an integer (and add 1 for reshaping)
                         for ival in range(len(Indices)):
                             
@@ -808,7 +823,7 @@ class ADHWriter():
                         
                         # check if another array already exists
                         if (UseArray == 1):
-
+                            
                             # increment the indices by 1
                             for ival in range(len(IntIndices)):
                                 IntIndices[ival] += 1
@@ -893,9 +908,19 @@ class ADHWriter():
                         MyValu = str(MyValu)
 
                     # end if
-                    
-                    # add the element as normal
-                    MySysDict.update({str(BlockName) : MyValu})
+
+                    # check that the element exists
+                    if (str(BlockName) == "") and (MyValu == {} or MyValu == []):
+
+                        # do nothing
+                        pass
+
+                    else:
+                        
+                        # add the element as normal
+                        MySysDict.update({str(BlockName) : MyValu})
+
+                    # end if
                     
                 # end if
             # end for
@@ -1100,8 +1125,18 @@ class ADHWriter():
 
                             # end if
 
-                            # add the element as normal
-                            TempDict.update({str(ChildName) : MyValue})
+                            # check if the result isn't empty
+                            if (str(ChildName) == "") and (MyValue == {} or MyValue == []):
+
+                                # do nothing
+                                pass
+
+                            else:
+                                
+                                # add the element as normal
+                                TempDict.update({str(ChildName) : MyValue})
+
+                            # end if
 
                         # end if
                     # end for
@@ -1268,9 +1303,18 @@ class ADHWriter():
                                 MyValue = str(MyValue)
                             # end if
 
-                            # add them to the current dictionary
-                            LocalDict.update({str(ChildName) : MyValue})
+                            # check if the dictionary should be updated
+                            if (str(ChildName) == "") and (MyValue == {} or MyValue == []):
 
+                                # do nothing
+                                pass
+
+                            else:
+                                
+                                # add them to the current dictionary
+                                LocalDict.update({str(ChildName) : MyValue})
+
+                            # end if
                         # end if
                     # end for
 
@@ -1342,25 +1386,51 @@ class ADHWriter():
             # get the requirement text
             MyReq = SH.getStereotypePropertyFirst(ParentBlock, self.ReqSter, "Text")
 
-            # split the string into parts
-            StringParts = MyReq.split(" ")
-
-            # get the value and units
-            MyVals = float(StringParts[-2])
-            MyUnit = StringParts[-1]
-
-            # get the description
-            MyDesc = MyReq.split(" shall be ")[0]
-            MyDesc = MyDesc.split(": ")[1]
-
-            # get the name
-            MyName = MyReq.split("):")[0]
+            # assume the requirement isn't available
+            HasReq = 0
             
-            # update the existing dictionary
-            MySysDict.update({"name" : MyName[1:]})
-            MySysDict.update({"description" : MyDesc})
-            MySysDict.update({"value" : {"value" : MyVals, "units" : str(MyUnit)}})
-            
+            # check to see if the requirement has a special set of characters
+            if ("):" in MyReq):
+
+                try:
+                    
+                    # split the string into parts
+                    StringParts = MyReq.split(" ")
+                    
+                    # get the value and units
+                    MyVals = float(StringParts[-2])
+                    MyUnit = StringParts[-1]
+                    
+                    # get the description
+                    MyDesc = MyReq.split(" shall be ")[0]
+                    MyDesc = MyDesc.split(": ")[1]
+                    
+                    # get the name
+                    MyName = MyReq.split("):")[0]
+                    
+                    # update the existing dictionary
+                    MySysDict.update({"name" : MyName[1:]})
+                    MySysDict.update({"description" : MyDesc})
+                    MySysDict.update({"value" : {"value" : MyVals, "units" : str(MyUnit)}})
+
+                    # note that the requirement was obtained
+                    HasReq = 1
+
+                except:
+
+                    # do nothing
+                    pass
+
+                # end try-except
+            # end if
+
+            # check if requirement was found
+            if (HasReq == 0):
+
+                # just return a text string instead
+                MySysDict.update({"text" : MyReq})
+
+            # end if
         # end if
         
         # return the dictionary

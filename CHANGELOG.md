@@ -11,3 +11,16 @@ Released 24 Mar 2025
 ## Added
 
 - Initial code release
+
+# Version 0.0.1
+
+Released 28 Mar 2025
+
+## Added
+
+- Part Properties and Association relations may now exist in the system model and won't be written to an ADH (or conflict with updating the system model from an ADH)
+- Instead of requiring a data structure for requirement text ("name", "description", "value:value", "value:units"), a requirement may also be represented as a single string, denoted by the "text" key-value pair.
+
+## Changed
+
+- In ReadADH, Part Properties are created for all blocks that are one-level below an existing block. This was to better facilitate the generation of Instance Specifications.
