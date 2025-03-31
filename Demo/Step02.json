@@ -1,0 +1,1106 @@
+{
+    "aircraft_system": {
+	"wbs_no": "1.0",
+    	"name": "Test Commercial Transport Aircraft",
+	"description": "Twin-engine commercial transport aircraft for testing data hierarchy",
+    	"metadata": {
+            "created_by": "Aerospace Engineer",
+            "created_date": "2025-01-07",
+            "version": "1.0",
+            "status": "draft",
+            "schema_version": "2.0"
+	},
+	"adh_data": {},
+    	"adh_root": {},
+	"requirements" : {
+	    "Req. Mission Segments" : {
+		"text" : "The aircraft must fly at least one climb, two cruise segments at different altitudes, and one descent segment."},
+	    "Payload Req." : {
+		"text" : "The aircraft must carry 180 passengers."
+	    },
+	    "Range Req." : {
+		"name" : "Range Requirement",
+		"description" : "Aircraft design range",
+		"value" : {
+		    "value" : 2000,
+		    "units" : "nmi"
+		}
+	    }	    
+	},
+    	"aliases": {},
+	"air_vehicle": {
+            "wbs_no": "1.2",
+            "name": "Commercial Transport Air Vehicle",
+            "description": "Main air vehicle assembly",
+            "airframe": {
+		"wbs_no": "1.2.2",
+        	"name": "Primary Airframe",
+            	"description": "Main airframe structure",
+            	"components": [
+                    {
+		        "name": "Wing",
+			"wbs_no" : "1.2.2.1",
+            		"description": "Main wing assembly",
+			"geometry": {
+                            "lifting_surface": {
+				"leading_edge_spline": {
+                                    "points": [
+					{"x": 15.2, "y": 2.5, "z": 0.0},
+					{"x": 18.5, "y": 12.8, "z": 1.2},
+					{"x": 22.3, "y": 17.9, "z": 2.1}
+                                    ]
+				},
+				"trailing_edge_spline": {
+                                    "points": [
+					{"x": 21.5, "y": 2.5, "z": 0.0},
+                    			{"x": 24.8, "y": 12.8, "z": 1.2},
+                    			{"x": 28.6, "y": 17.9, "z": 2.1}
+                                    ]
+				},
+				"airfoil_sections": [
+                                    {
+					"station": 0.0,
+					"parameters": {
+                                            "type": "NASA SC(2)-0012",
+                                            "thickness_ratio": 0.12,
+                                            "max_camber": 0.02,
+                                            "max_thickness_location": 0.3
+					}
+                                    },
+                                    {
+					"station": 0.5,
+					"parameters": {
+                                            "type": "NASA SC(2)-0010",
+                                            "thickness_ratio": 0.10,
+                                            "max_camber": 0.015,
+                                            "max_thickness_location": 0.3
+					}
+                                    },
+                                    {
+					"station": 1.0,
+					"parameters": {
+                                            "type": "NASA SC(2)-0008",
+                                            "thickness_ratio": 0.08,
+                                            "max_camber": 0.01,
+                                            "max_thickness_location": 0.3
+					}
+                                    }
+				]
+                            }
+			},
+			"parameters": {
+                            "span": {"value": 35.8, "units": "m"},
+                            "area": {"value": 121.7, "units": "m^2"},
+                            "aspect_ratio": {"value": 9.5, "units": "dimensionless"},
+                            "sweep_angle": {"value": 25.0, "units": "deg"},
+                            "taper_ratio": {"value": 0.3, "units": "dimensionless"},
+                            "dihedral_angle": {"value": 5.0, "units": "deg"},
+                            "weight": {"value": 2464.3, "units": "kg"},
+                            "material": "Carbon Fiber Composite",
+                            "design_load_factor": {"value": 3.8, "units": "g"}
+			},
+			"requirements": [
+                            {
+				"name": "Wing Loading",
+				"description": "Maximum wing loading requirement",
+				"value": {"value": 550.0, "units": "kg/m^2"}
+                            },
+                            {
+				"name": "Flutter Speed",
+				"description": "Minimum flutter speed requirement",
+				"value": {"value": 350.0, "units": "m/s"}
+                            }
+			],
+			"performance": [
+                            {
+				"discipline": "Aerodynamics",
+				"parameters": {
+                                    "cl_max": 1.8,
+                                    "cd_min": 0.015,
+                                    "cm_alpha": -0.12,
+                                    "lift_curve_slope": 6.28
+				}
+                            },
+                            {
+				"discipline": "Structures",
+				"parameters": {
+                                    "flutter_speed": 380.0,
+                                    "divergence_speed": 420.0,
+                                    "first_bending_mode": 3.2,
+                                    "wing_loading" : 530.0
+				}
+                            }
+			]
+                    },
+                    {
+			"name": "Fuselage",
+			"wbs_no" : "1.2.2.2",
+			"description": "Main fuselage structure",
+			"geometry": {
+                            "body": {
+				"reference_axis": {
+                                    "points": [
+					{"x": 0.0, "y": 0.0, "z": 0.0},
+					{"x": 19.0, "y": 0.0, "z": 0.0},
+					{"x": 38.0, "y": 0.0, "z": 0.0}
+                                    ]
+				},
+				"cross_sections": [
+                                    {
+					"station": 0.0,
+					"area": {"value": 3.8, "units": "m^2"},
+					"perimeter": {"value": 7.2, "units": "m"},
+					"max_width": {"value": 2.2, "units": "m"},
+					"max_height": {"value": 2.2, "units": "m"}
+                                    },
+                                    {
+					"station": 0.5,
+					"area": {"value": 11.3, "units": "m^2"},
+					"perimeter": {"value": 12.5, "units": "m"},
+					"max_width": {"value": 3.8, "units": "m"},
+					"max_height": {"value": 3.8, "units": "m"}
+                                    },
+                                    {
+					"station": 1.0,
+					"area": {"value": 4.5, "units": "m^2"},
+					"perimeter": {"value": 8.1, "units": "m"},
+					"max_width": {"value": 2.5, "units": "m"},
+					"max_height": {"value": 2.5, "units": "m"}
+                                    }
+				]
+                            }
+			},
+			"parameters": {
+                            "length": {"value": 38.0, "units": "m"},
+                            "max_diameter": {"value": 3.8, "units": "m"},
+                            "fineness_ratio": {"value": 10.0, "units": "dimensionless"},
+                            "weight": {"value": 4500.0, "units": "kg"},
+                            "material": "Aluminum Alloy 2024-T3",
+                            "pressurization_differential": {"value": 8.5, "units": "psi"}
+			}
+                    },
+                    {
+			"name": "Empennage",
+			"wbs_no" : "1.2.2.3",
+			"description": "Tail assembly",
+			"components": [
+                            {
+				"name": "Horizontal Stabilizer",
+				"wbs_no" : "1.2.2.3.1",
+				"description": "Horizontal tail surface",
+				"geometry": {
+                                    "lifting_surface": {
+					"leading_edge_spline": {
+                                            "points": [
+						{"x": 32.5, "y": 0.0, "z": 5.2},
+						{"x": 33.8, "y": 3.5, "z": 5.2},
+						{"x": 35.1, "y": 7.0, "z": 5.2}
+                                            ]
+					}
+                                    }
+				},
+				"parameters": {
+                                    "span": {"value": 14.0, "units": "m"},
+                                    "area": {"value": 32.5, "units": "m^2"},
+                                    "aspect_ratio": {"value": 6.0, "units": "dimensionless"},
+                                    "sweep_angle": {"value": 30.0, "units": "deg"},
+                                    "taper_ratio": {"value": 0.35, "units": "dimensionless"}
+				}
+                            },
+                            {
+				"name": "Vertical Stabilizer",
+				"wbs_no" : "1.2.2.3.2",
+				"description": "Vertical tail surface",
+				"geometry": {
+                                    "lifting_surface": {
+					"leading_edge_spline": {
+                                            "points": [
+						{"x": 32.0, "y": 0.0, "z": 3.8},
+						{"x": 33.5, "y": 0.0, "z": 6.5},
+						{"x": 35.0, "y": 0.0, "z": 9.2}
+                                            ]
+					}
+                                    }
+				},
+				"parameters": {
+                                    "height": {"value": 6.2, "units": "m"},
+                                    "area": {"value": 28.5, "units": "m^2"},
+                                    "aspect_ratio": {"value": 1.8, "units": "dimensionless"},
+                                    "sweep_angle": {"value": 35.0, "units": "deg"},
+                                    "taper_ratio": {"value": 0.4, "units": "dimensionless"}
+				}
+                            }
+			]
+                    }
+		]
+            },
+            "propulsion": {
+		"wbs_no": "1.2.3",
+		"name": "Propulsion System",
+		"description": "Aircraft propulsion system",
+		"components": [
+                    {
+			"name": "Engine 1",
+			"wbs_no" : "1.2.3.1",
+			"description": "Left turbofan engine",
+			"type": "Turbofan",
+			"parameters": {
+                            "thrust": {"value": 120000.0, "units": "N"},
+                            "bypass_ratio": {"value": 5.0, "units": "dimensionless"},
+                            "overall_pressure_ratio": {"value": 32.0, "units": "dimensionless"},
+                            "specific_fuel_consumption": {"value": 0.38, "units": "lb/lbf-hr"},
+                            "length": {"value": 4.2, "units": "m"},
+                            "diameter": {"value": 2.1, "units": "m"},
+                            "weight": {"value": 2300.0, "units": "kg"}
+			},
+			"operating_envelope": {
+                            "altitude_range": {
+				"min": 0,
+				"max": 41000,
+				"units": "ft"
+                            },
+                            "mach_range": {
+				"min": 0,
+				"max": 0.85
+                            },
+                            "throttle_range": {
+				"min": 0,
+				"max": 1.0
+                            }
+			},
+			"reference_conditions": [
+                            {
+				"altitude": 0,
+                		"mach": 0,
+				"throttle": 1.0,
+                		"thrust": 120000,
+                		"fuel_flow": 3800,
+				"tsfc": 0.38
+                            },
+                            {
+				"altitude": 35000,
+				"mach": 0.78,
+				"throttle": 0.85,
+				"thrust": 25000,
+				"fuel_flow": 900,
+				"tsfc": 0.58
+                            }
+			],
+			"performance": {
+                            "thrust_specific_fuel_consumption": {"value": 0.38, "units": "lb/lbf-hr"},
+                            "thrust_to_weight_ratio": {"value": 5.2, "units": "dimensionless"},
+                            "fan_pressure_ratio": {"value": 1.6, "units": "dimensionless"},
+                            "turbine_inlet_temperature": {"value": 1500.0, "units": "K"}
+			}
+                    },
+                    {
+			"name": "Engine 2",
+			"wbs_no": "1.2.3.2",
+			"description": "Right turbofan engine",
+			"type": "Turbofan",
+			"parameters": {
+                            "thrust": {"value": 120000.0, "units": "N"},
+                            "bypass_ratio": {"value": 5.0, "units": "dimensionless"},
+                            "overall_pressure_ratio": {"value": 32.0, "units": "dimensionless"},
+                            "specific_fuel_consumption": {"value": 0.38, "units": "lb/lbf-hr"},
+                            "length": {"value": 4.2, "units": "m"},
+                            "diameter": {"value": 2.1, "units": "m"},
+                            "weight": {"value": 2300.0, "units": "kg"}
+			},
+			"operating_envelope": {
+                            "altitude_range": {
+				"min": 0,
+				"max": 41000,
+				"units": "ft"
+                            },
+                            "mach_range": {
+				"min": 0,
+				"max": 0.85
+                            },
+                            "throttle_range": {
+				"min": 0,
+				"max": 1.0
+                            }
+			},
+			"reference_conditions": [
+                            {
+				"altitude": 0,
+                		"mach": 0,
+				"throttle": 1.0,
+				"thrust": 120000,
+				"fuel_flow": 3800,
+                		"tsfc": 0.38
+                            },
+                            {
+				"altitude": 35000,
+				"mach": 0.78,
+				"throttle": 0.85,
+				"thrust": 25000,
+				"fuel_flow": 900,
+				"tsfc": 0.58
+                            }
+			]
+                    }
+                ],
+                "EngineDeck" : {
+                    "name": "Engine",
+                    "description": "Main engine component",
+                    "cycle": {
+                        "design_point": {
+                            "name": "Cycle",
+                            "elements": [
+                                {
+                                    "name": "inlet",
+                                    "mn": 0.751,
+                                    "ram_recovery": 0.999,
+                                    "type": "inlet"
+                                },
+                                {
+                                    "name": "fan",
+                                    "map_data": "FanMap",
+                                    "map_extrap": true,
+                                    "bleed_names": [],
+                                    "pr_des": 1.685,
+                                    "eff_des": 0.8948,
+                                    "mn": 0.4578,
+                                    "type": "comp"
+                                },
+                                {
+                                    "name": "splitter",
+                                    "bpr": 5.105,
+                                    "mn1": 0.3104,
+                                    "mn2": 0.4518,
+                                    "type": "splitter"
+                                },
+                                {
+                                    "name": "duct4",
+                                    "mn": 0.3121,
+                                    "dPqP": 0.0048,
+                                    "type": "duct"
+                                },
+                                {
+                                    "name": "lpc",
+                                    "map_data": "LPCMap",
+                                    "map_extrap": true,
+                                    "bleed_names": [],
+                                    "pr_des": 1.935,
+                                    "eff_des": 0.9243,
+                                    "mn": 0.3059,
+                                    "type": "comp"
+                                },
+                                {
+                                    "name": "duct6",
+                                    "mn": 0.3563,
+                                    "dPqP": 0.0101,
+                                    "type": "duct"
+                                },
+                                {
+                                    "name": "hpc",
+                                    "map_data": "HPCMap",
+                                    "map_extrap": true,
+                                    "bleed_names": [
+                                        "cool1",
+                                        "cool2",
+                                        "cust"
+                                    ],
+                                    "pr_des": 9.369,
+                                    "eff_des": 0.8707,
+                                    "mn": 0.2442,
+                                    "frac_W": [
+                                        0.050708,
+                                        0.020274,
+                                        0.0445
+                                    ],
+                                    "frac_P": [
+                                        0.5,
+                                        0.55,
+                                        0.5
+                                    ],
+                                    "frac_work": [
+                                        0.5,
+                                        0.5,
+                                        0.5
+                                    ],
+                                    "type": "comp"
+                                },
+                                {
+                                    "name": "bld3",
+                                    "bleed_names": [
+                                        "cool3",
+                                        "cool4"
+                                    ],
+                                    "frac_W": [
+                                        0.067214,
+                                        0.101256
+                                    ],
+                                    "mn": 0.3,
+                                    "type": "bleed"
+                                },
+                                {
+                                    "name": "burner",
+                                    "fuel_type": "Jet-A(g)",
+                                    "mn": 0.1025,
+                                    "dp_qp": 0.054,
+                                    "type": "comb"
+                                },
+                                {
+                                    "name": "hpt",
+                                    "map_data": "HPTMap",
+                                    "map_extrap": true,
+                                    "bleed_names": [
+                                        "cool3",
+                                        "cool4"
+                                    ],
+                                    "eff_des": 0.8888,
+                                    "mn": 0.365,
+                                    "frac_P": [
+                                        1.0,
+                                        0.0
+                                    ],
+                                    "type": "turb"
+                                },
+                                {
+                                    "name": "duct11",
+                                    "mn": 0.3063,
+                                    "dPqP": 0.0051,
+                                    "type": "duct"
+                                },
+                                {
+                                    "name": "lpt",
+                                    "map_data": "LPTMap",
+                                    "map_extrap": true,
+                                    "bleed_names": [
+                                        "cool1",
+                                        "cool2"
+                                    ],
+                                    "eff_des": 0.8996,
+                                    "mn": 0.4127,
+                                    "frac_P": [
+                                        1.0,
+                                        0.0
+                                    ],
+                                    "type": "turb"
+                                },
+                                {
+                                    "name": "duct13",
+                                    "mn": 0.4463,
+                                    "dPqP": 0.0107,
+                                    "type": "duct"
+                                },
+                                {
+                                    "name": "core_nozz",
+                                    "nozz_type": "CV",
+                                    "loss_coef": "Cv",
+                                    "cv": 0.9933,
+                                    "type": "nozz"
+                                },
+                                {
+                                    "name": "byp_bld",
+                                    "bleed_names": [
+                                        "bypBld"
+                                    ],
+                                    "frac_W": [
+                                        0.005
+                                    ],
+                                    "mn": 0.4489,
+                                    "type": "bleed"
+                                },
+                                {
+                                    "name": "duct15",
+                                    "mn": 0.4589,
+                                    "dPqP": 0.0149,
+                                    "type": "duct"
+                                },
+                                {
+                                    "name": "byp_nozz",
+                                    "nozz_type": "CV",
+                                    "loss_coef": "Cv",
+                                    "cv": 0.9939,
+                                    "type": "nozz"
+                                },
+                                {
+                                    "name": "lp_shaft",
+                                    "num_ports": 3,
+                                    "nmech_type": "LP",
+                                    "type": "shaft"
+                                },
+                                {
+                                    "name": "hp_shaft",
+                                    "num_ports": 2,
+                                    "nmech_type": "HP",
+                                    "type": "shaft"
+                                }
+                            ],
+                            "global_connections": [
+                                "fan,lp_shaft",
+                                "lpc,lp_shaft",
+                                "lpt,lp_shaft",
+                                "hpc,hp_shaft",
+                                "hpt,hp_shaft"
+                            ],
+                            "flow_connections": [
+                                [
+                                    "fc",
+                                    "inlet"
+                                ],
+                                [
+                                    "inlet",
+                                    "fan"
+                                ],
+                                [
+                                    "fan",
+                                    "splitter"
+                                ],
+                                [
+                                    "splitter",
+                                    "duct4__1"
+                                ],
+                                [
+                                    "duct4",
+                                    "lpc"
+                                ],
+                                [
+                                    "lpc",
+                                    "duct6"
+                                ],
+                                [
+                                    "duct6",
+                                    "hpc"
+                                ],
+                                [
+                                    "hpc",
+                                    "bld3"
+                                ],
+                                [
+                                    "bld3",
+                                    "burner"
+                                ],
+                                [
+                                    "burner",
+                                    "hpt"
+                                ],
+                                [
+                                    "hpt",
+                                    "duct11"
+                                ],
+                                [
+                                    "duct11",
+                                    "lpt"
+                                ],
+                                [
+                                    "lpt",
+                                    "duct13"
+                                ],
+                                [
+                                    "duct13",
+                                    "core_nozz"
+                                ],
+                                [
+                                    "splitter",
+                                    "byp_bld__2"
+                                ],
+                                [
+                                    "byp_bld",
+                                    "duct15"
+                                ],
+                                [
+                                    "duct15",
+                                    "byp_nozz"
+                                ]
+                            ]
+                        },
+                        "od_points": [
+                            {
+                                "name": "OD_full_pwr",
+                                "flight_conditions_od": {
+                                    "name": "od_full_pwr_fc",
+                                    "mn": [
+                                        0.8,
+                                        0.7,
+                                        0.4,
+                                        0.6,
+                                        0.8,
+                                        0.6,
+                                        0.4,
+                                        0.2,
+                                        0.001,
+                                        0.001,
+                                        0.2,
+                                        0.4,
+                                        0.6,
+                                        0.6,
+                                        0.4,
+                                        0.2,
+                                        0.001
+                                    ],
+                                    "alt": [
+                                        35000.0,
+                                        35000.0,
+                                        20000.0,
+                                        20000.0,
+                                        20000.0,
+                                        10000.0,
+                                        10000.0,
+                                        10000.0,
+                                        10000.0,
+                                        1000.0,
+                                        1000.0,
+                                        1000.0,
+                                        1000.0,
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "d_ts": 0.0
+                                },
+                                "throttle_mode": "T4"
+                            },
+                            {
+                                "name": "OD_part_pwr",
+                                "flight_conditions_od": {
+                                    "name": "od_part_pwr_fc",
+                                    "mn": [
+                                        0.8,
+                                        0.7,
+                                        0.4,
+                                        0.8,
+                                        0.6,
+                                        0.4,
+                                        0.6,
+                                        0.4,
+                                        0.2
+                                    ],
+                                    "alt": [
+                                        35000.0,
+                                        35000.0,
+                                        35000.0,
+                                        10000.0,
+                                        10000.0,
+                                        10000.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "d_ts": 0.0
+                                },
+                                "PC": [
+                                    1.0,
+                                    0.8
+                                ],
+                                "throttle_mode": "percent_thrust"
+                            }
+                        ]
+                    },
+                    "metadata": {
+                        "key": "example_key",
+                        "value": "example_value"
+                    },
+                    "subcomponents": [],
+                    "performance": {
+                        "name": "CyclePerformance",
+                        "thermo_method": "CEA",
+                        "throttle_mode": "T4"
+                    },
+                    "behavior": {
+                        "name": "CycleBehavior",
+                        "design": true,
+                        "flight_conditions_design": {
+                            "name": "fc",
+                            "mn": [
+                                0.8
+                            ],
+                            "alt": [
+                                35000.0
+                            ]
+                        },
+                        "performance_components": [
+                            {
+                                "name": "perf",
+                                "pt2_source": "inlet",
+                                "pt3_source": "hpc",
+                                "wfuel_0_source": "burner",
+                                "ram_drag_source": "inlet",
+                                "fg_0_source": "core_nozz",
+                                "fg_1_source": "byp_nozz"
+                            }
+                        ]
+                    }
+                }
+            },
+            "systems": {
+		"wbs_no": "1.2.4",
+		"name": "Aircraft Systems",
+		"description": "Main aircraft systems",
+		"components": [
+                    {
+			"name": "Flight Control System",
+			"description": "Primary and secondary flight controls",
+			"wbs_no": "1.2.4.1",
+			"mil_std_881f_reference": "1.2.4.1",
+			"type": "System",
+			"attributes": {
+                            "functional_blocks": [
+				{
+                                    "block_id": "FCU_1",
+                                    "name": "Flight Control Unit 1",
+                                    "description": "Primary flight control computer",
+                                    "inputs": ["attitude", "airspeed", "altitude", "pilot_inputs"],
+                                    "outputs": ["surface_commands", "system_status"]
+                                },
+                                {
+                                    "block_id": "ACT_1",
+                                    "name": "Actuator Control",
+                                    "description": "Surface actuator control unit",
+                                    "inputs": ["surface_commands"],
+                                    "outputs": ["actuator_positions"]
+				}
+                            ],
+                            "data_signals": [
+				{
+                                    "signal_id": "ATT_1",
+                                    "name": "Attitude Data",
+                                    "type": "DIGITAL",
+                                    "direction": "INPUT",
+                                    "frequency": 50
+				}
+                            ],
+                            "physical_characteristics": {
+				"weight": 450.0,
+				"dimensions": {
+                                    "length": 0.8,
+                                    "width": 0.6,
+                                    "height": 0.3
+				},
+                                "volume": 0.144,
+                                "center_of_gravity": {
+                                    "x": 15.2,
+                                    "y": 0.0,
+                                    "z": 2.1
+				}
+                            },
+                            "cooling_requirements": {
+                                "method": "Forced Air",
+                                "heat_dissipation": 2500.0,
+                                "max_operating_temperature": 70.0
+                            },
+                            "power_requirements": {
+                                "voltage": 28.0,
+                                "current": 15.0,
+                                "power_type": "DC",
+                                "peak_power": 750.0,
+                                "average_power": 420.0
+                            }
+            		},
+			"parameters": {
+                            "type": "Fly-by-wire",
+                            "redundancy_level": "Triple",
+                            "control_surfaces": {
+				"ailerons": {
+                                    "span": {"value": 4.2, "units": "m"},
+                                    "chord_ratio": {"value": 0.25, "units": "dimensionless"}
+				},
+				"elevators": {
+                                    "span": {"value": 5.8, "units": "m"},
+                                    "chord_ratio": {"value": 0.3, "units": "dimensionless"}
+				},
+				"rudder": {
+                                    "height": {"value": 4.5, "units": "m"},
+                                    "chord_ratio": {"value": 0.35, "units": "dimensionless"}
+				}
+                            }
+			}
+                    },
+                    {
+                        "name": "Hydraulic System",
+                        "description": "Aircraft hydraulic power system",
+                        "wbs_no": "1.2.4.2",
+                        "mil_std_881f_reference": "1.2.4.2",
+                        "type": "System",
+                        "attributes": {
+                            "physical_characteristics": {
+                                "weight": 850.0,
+                                "dimensions": {
+                                    "length": 2.5,
+                                    "width": 1.2,
+                                    "height": 0.8
+                                },
+                                "volume": 2.4,
+                                "center_of_gravity": {
+                                    "x": 16.5,
+                                    "y": 0.0,
+                                    "z": 1.8
+                                }
+                            },
+                            "fluid_flow": {
+                                "fluid_type": "Hydraulic Oil MIL-PRF-83282",
+                                "flow_rate": 120.0,
+                                "max_pressure": 3000.0,
+                                "min_pressure": 1500.0,
+                                "temperature_range": [-54.0, 135.0],
+                                "viscosity": 12.5,
+                                "density": 850.0
+                            }
+			}
+                    },
+                    {
+                        "name": "Electrical System",
+                        "description": "Aircraft electrical power generation and distribution",
+                        "wbs_no": "1.2.4.3",
+                        "mil_std_881f_reference": "1.2.4.3",
+                        "type": "System",
+                        "attributes": {
+                            "physical_characteristics": {
+                                "weight": 1200.0,
+                                "dimensions": {
+                                    "length": 3.0,
+                                    "width": 1.5,
+                                    "height": 1.0
+                                },
+                                "volume": 4.5,
+                                "center_of_gravity": {
+                                    "x": 17.2,
+                                    "y": 0.0,
+                                    "z": 1.5
+				}
+                            },
+                            "power_requirements": {
+                                "voltage": 115.0,
+                                "current": 400.0,
+                                "frequency": 400.0,
+                                "power_type": "AC",
+                                "peak_power": 250000.0,
+                                "average_power": 180000.0
+                            }
+	            	}
+                    },
+                    {
+                        "name": "Environmental Control System",
+                        "description": "Aircraft environmental control system",
+                        "wbs_no": "1.2.4.4",
+                        "mil_std_881f_reference": "1.2.4.4",
+                        "type": "System",
+                        "attributes": {
+                            "physical_characteristics": {
+                                "weight": 750.0,
+                                "dimensions": {
+                                    "length": 2.2,
+                                    "width": 1.8,
+                                    "height": 1.2
+				},
+                                "volume": 4.75,
+                                "center_of_gravity": {
+                                    "x": 18.5,
+                                    "y": 0.0,
+                                    "z": 1.2
+				}
+                            },
+                            "cooling_requirements": {
+                                "method": "Air Cycle Machine",
+                                "heat_dissipation": 85000.0,
+                                "max_operating_temperature": 200.0
+                            }
+			},
+			"parameters": {
+                            "max_cabin_altitude": {"value": 8000.0, "units": "ft"},
+                            "max_temperature_differential": {"value": 45.0, "units": "degC"},
+                            "max_pressurization": {"value": 8.5, "units": "psi"},
+                            "air_flow_rate": {"value": 1.2, "units": "kg/s"}
+			}
+                    },
+                    {
+                        "name": "Landing Gear",
+                        "description": "Main and nose landing gear",
+                        "wbs_no": "1.2.4.5",
+                        "mil_std_881f_reference": "1.2.4.5",
+                        "type": "System",
+			"components": [
+                            {
+                                "name": "Nose Gear",
+                                "description": "Steerable nose landing gear",
+                                "parameters": {
+                                    "type": "Dual wheel",
+                                    "strut_length": {"value": 2.8, "units": "m"},
+                                    "tire_size": "H44.5x16.5-21",
+                                    "max_load": {"value": 25000.0, "units": "kg"},
+                                    "retraction_mechanism": "Hydraulic",
+                                    "steering_angle": {"value": 75.0, "units": "deg"}
+                                },
+                                "attributes": {
+                                    "physical_characteristics": {
+                                        "weight": 450.0,
+                                        "dimensions": {
+                                            "length": 3.2,
+                                            "width": 0.8,
+                                            "height": 1.5
+                                        },
+                                        "volume": 3.84,
+                                        "center_of_gravity": {
+                                            "x": 5.2,
+                                            "y": 0.0,
+                                            "z": -1.8
+					}
+                                    }
+				}
+                            },
+                            {
+                                "name": "Main Gear",
+                                "description": "Twin main landing gear",
+                                "parameters": {
+                                    "type": "Twin tandem",
+                                    "strut_length": {"value": 3.5, "units": "m"},
+                                    "tire_size": "H49.5x19-22",
+                                    "max_load": {"value": 85000.0, "units": "kg"},
+                                    "retraction_mechanism": "Hydraulic",
+                                    "brake_type": "Carbon"
+                                },
+                                "attributes": {
+                                    "physical_characteristics": {
+                                        "weight": 1850.0,
+                                        "dimensions": {
+                                            "length": 4.5,
+                                            "width": 1.2,
+                                            "height": 2.0
+                                        },
+                                        "volume": 10.8,
+                                        "center_of_gravity": {
+                                            "x": 18.5,
+                                            "y": 3.2,
+                                            "z": -1.8
+                                        }
+                                    }
+				}
+                            }
+			]
+                    }
+		]
+            },
+            "equipment": {
+                "wbs_no": "1.2.5",
+                "name": "Aircraft Equipment",
+                "description": "Aircraft equipment and furnishings",
+                "components": [
+                    {
+                        "name": "Avionics",
+                        "description": "Aircraft avionics systems",
+                        "wbs_no": "1.2.5.1",
+                        "type": "System",
+                        "components": [
+                            {
+                                "name": "Navigation System",
+                                "description": "Aircraft navigation suite",
+                                "parameters": {
+                                    "type": "Integrated GPS/INS",
+                                    "position_accuracy": {"value": 0.1, "units": "nm"},
+                                    "update_rate": {"value": 50, "units": "Hz"}
+                                }
+                            },
+                            {
+                                "name": "Communication System",
+                                "description": "Aircraft communication suite",
+                                "parameters": {
+                                    "frequency_range": {"min": 118.0, "max": 136.975, "units": "MHz"},
+                                    "power_output": {"value": 25, "units": "W"}
+                                }
+                            },
+                            {
+                                "name": "Weather Radar",
+                                "description": "Aircraft weather radar system",
+                                "parameters": {
+                                    "range": {"value": 320, "units": "nm"},
+                                    "scan_angle": {"value": 120, "units": "deg"},
+                                    "frequency": {"value": 9.375, "units": "GHz"}
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "physical_characteristics": {
+                                "weight": 850.0,
+                                "dimensions": {
+                                    "length": 2.0,
+                                    "width": 1.5,
+                                    "height": 0.8
+                                },
+                                "volume": 2.4,
+                                "center_of_gravity": {
+                                    "x": 4.2,
+                                    "y": 0.0,
+                                    "z": 1.5
+                                }
+                            },
+                            "power_requirements": {
+                                "voltage": 28.0,
+                                "current": 45.0,
+                                "power_type": "DC",
+                                "peak_power": 15000.0,
+                                "average_power": 10000.0
+                            },
+                            "cooling_requirements": {
+                                "method": "Forced Air",
+                                "heat_dissipation": 10000.0,
+                                "max_operating_temperature": 70.0
+                            }
+                        }
+                    },
+                    {
+                        "name": "Auxiliary Power Unit",
+                        "description": "Aircraft APU system",
+                        "wbs_no": "1.2.5.2",
+                        "type": "System",
+                        "parameters": {
+                            "power_output": {"value": 250.0, "units": "kVA"},
+                            "fuel_consumption": {"value": 120.0, "units": "kg/hr"},
+                            "starting_time": {"value": 45.0, "units": "s"},
+                            "operating_altitude": {"value": 41000.0, "units": "ft"}
+                        },
+                        "attributes": {
+                            "physical_characteristics": {
+                                "weight": 350.0,
+                                "dimensions": {
+                                    "length": 1.8,
+                                    "width": 0.9,
+                                    "height": 0.9
+                                },
+                                "volume": 1.46,
+                                "center_of_gravity": {
+                                    "x": 35.2,
+                                    "y": 0.0,
+                                    "z": 0.5
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+	    "furnishings_and_equipment" : {
+		"wbs_no" : "1.2.8",
+		"name": "Funishings and Equipment",
+		"seats" : {
+		    "wbs_no" : "1.2.8.1",
+		    "name" : "Seats",
+		    "description" : "Seats for different passenger classes",
+		    "requirements" : {
+			"number_of_seats" : {
+			    "text" : "There must be one seat on the aircraft for each passenger and crewmember."}
+		    },
+		    "first_class" : {
+			"number" : 40,
+			"floatation_device" : false,
+			"pitch" : {
+			    "value" : 60,
+			    "units" : "in"
+			}
+		    },
+		    "economy" : {
+			"number" : 160,
+			"floatation_device" : true,
+			"pitch" : {
+			    "value" : 32,
+			    "units" : "in"
+			}
+		    }
+		}
+	    }	    
+	}
+    }
+}
