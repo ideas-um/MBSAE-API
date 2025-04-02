@@ -20,7 +20,7 @@ Additional Contributors:
 - Safa Bakhshi
 - Alex Kerlee
 
-README last updated: 21 Mar 2025
+README last updated: 02 Apr 2025
 
 ***************************
 
@@ -78,6 +78,17 @@ Similarly, any ADH that is written from MagicDraw will reside in this folder.
 
 On the systems that this code was developed on, administrative access was required to create a JSON file within the plugin.
 If you obtain an error when trying to write an ADH from MagicDraw, please check that you run MagicDraw as an administrator.
+
+*************************
+
+# Aircraft Data Hierarchy
+
+The Aircraft Data Hierarchy (ADH) is a modern data definition standard for the aerospace vehicle design studies.
+The ADH enables engineers to exchange information (i.e. geometry, disciplinary tool inputs/outputs, requirements, etc.) between tools using a common data structure and a schema that can be validated.
+This structured system allows more efficient data transfer within an integrated workflow and improved collaboration between entities that utilize the ADH standard.
+The ADH is specifically architected to align the high-level needs of model-based systems analysis (MBSA) and model-based systems engineering (MBSE), including having a recursive structure.
+Utility methods are being developed that will make the reading, writing, and manipulation of the ADH in Python simple and straightforward.
+Documentation on the ADH can be found on Boeing's [Aircraft Data Hierarchy Documentation](https://boeing.github.io/aircraft-data-hierarchy/) webpage.
 
 ******************
 
