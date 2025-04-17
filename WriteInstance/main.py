@@ -8,7 +8,7 @@ WRITE INSTANCE:
 
 Written by Paul Mokotoff, prmoko@umich.edu
 
-Last Updated: 28 Mar 2025
+Last Updated: 17 Apr 2025
 
 Inputs:
 
@@ -584,7 +584,12 @@ def ReshapeArray(Arr, NewShape):
     # end for
 
     # check that the number of elements match
-    assert TotalElements == len(Arr), "The total size of the new Arr must be unchanged."
+    if (TotalElements != len(Arr)):
+
+        # throw an exception
+        raise Exception("ERROR - ReshapeArray: total size of array changed; Num Elements = " + repr(TotalElements) + "; Arr = " + repr(Arr))
+
+    # end if
 
     # recursively construct a new array
     return ConstructNewShape(Arr, NewShape)
@@ -765,9 +770,31 @@ class ADHInstanceWriter():
 
                 # get the property name
                 PropertyName = str(FeatureName.split("Value Property ")[1])
-
+                
                 # get the value
-                PropertyValue = MyValue[0].getValue()
+                try:
+
+                    # try treating it as an integer/double/string
+                    PropertyValue = MyValue[0].getValue()
+
+                except:
+
+                    # if it fails, try another method
+                    try:
+
+                        # treat the value as a boolean
+                        PropertyValue = MyValue[0].isValue()
+
+                    except:
+
+                        # return a null value
+                        PropertyValue = None
+
+                        # there is an issue with the value property format/type
+                        raise Exception("ERROR - WriteInstance: " + repr(FeatureName) + " is neither an integer, double, string, or Boolean.")
+
+                    # end try-except
+                # end try-except
 
                 # check if the name has an underscore
                 HasUnder = PropertyName.find("__")
@@ -811,6 +838,11 @@ class ADHInstanceWriter():
                             # reshape the temporary array
                             FinalArray = ReshapeArray(TempArray, IntIndices)
 
+                            # reset the indices
+                            for ival in range(len(IntIndices)):
+                                IntIndices[ival] = 0
+                            # end if
+
                             # write out the first array
                             TempDict.update({str(OldBaseString) : FinalArray})
 
@@ -819,17 +851,18 @@ class ADHInstanceWriter():
                             # start using the array
                             UseArray = 1
 
-                            # create a list for the actual indices
-                            IntIndices = [0] * len(Indices)
-
-                            # change each index to an integer
-                            for ival in range(len(Indices)):
-
-                                # convert the value and take the maximum for array space allocation
-                                IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
-
-                            # end for
                         # end if
+
+                        # create a list for the actual indices
+                        IntIndices = [0] * len(Indices)
+
+                        # change each index to an integer
+                        for ival in range(len(Indices)):
+                            
+                            # convert the value and take the maximum for array space allocation
+                            IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
+                            
+                        # end for
 
                         # remember the new string
                         OldBaseString = NewBaseString
@@ -854,6 +887,11 @@ class ADHInstanceWriter():
 
                         # reshape the temporary array
                         FinalArray = ReshapeArray(TempArray, IntIndices)
+
+                        # reset the indices
+                        for ival in range(len(IntIndices)):
+                            IntIndices[ival] = 0
+                        # end if
 
                         # write out the first array
                         TempDict.update({str(OldBaseString) : FinalArray})
@@ -930,6 +968,11 @@ class ADHInstanceWriter():
                             # reshape the temporary array
                             FinalArray = ReshapeArray(TempArray, IntIndices)
 
+                            # reset indices
+                            for ival in range(len(IntIndices)):
+                                IntIndices[ival] = 0
+                            # end for                            
+
                             # write out the first array
                             TempDict.update({OldBaseString : FinalArray})
 
@@ -938,17 +981,18 @@ class ADHInstanceWriter():
                             # start using the array
                             UseArray = 1
 
-                            # create a list for the actual indices
-                            IntIndices = [0] * len(Indices)
-
-                            # change each index to an integer
-                            for ival in range(len(Indices)):
-
-                                # conert the value to an integer and take the maximum for array space allocation
-                                IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
-
-                            # end for
                         # end if
+
+                        # create a list for the actual indices
+                        IntIndices = [0] * len(Indices)
+
+                        # change each index to an integer
+                        for ival in range(len(Indices)):
+
+                            # conert the value to an integer and take the maximum for array space allocation
+                            IntIndices[ival] = max(IntIndices[ival], int(Indices[ival]))
+                            
+                        # end for
 
                         # remember the new string
                         OldBaseString = NewBaseString
@@ -974,6 +1018,11 @@ class ADHInstanceWriter():
                         # reshape the temporary array
                         FinalArray = ReshapeArray(TempArray, IntIndices)
 
+                        # reset indices
+                        for ival in range(len(IntIndices)):
+                            IntIndices[ival] = 0
+                        # end for                        
+
                         # write out the first array
                         TempDict.update({OldBaseString : FinalArray})
 
@@ -987,7 +1036,6 @@ class ADHInstanceWriter():
 
                 # end if
             # end if
-
         # end for
 
         # check if the array is still in use after iterating
@@ -1180,9 +1228,6 @@ try:
 except Exception as e:
     
     # print exception header
-    print("Code run error - WriteInstance")
-    
-    # print the exception
-    print(e)
+    raise Exception("Code run error - WriteInstance: " + e)
 
 # end try-except
