@@ -24,3 +24,11 @@ Released 28 Mar 2025
 ## Changed
 
 - In ReadADH, Part Properties are created for all blocks that are one-level below an existing block. This was to better facilitate the generation of Instance Specifications.
+
+# Version 0.0.2
+
+Released 17 Apr 2025
+
+## Fixed
+
+- Bug fixes in WriteInstance: (1) Boolean values can now be written from an Instance Specification to the ADH; (2) fixed issue associated with writing a scalar value after an array is written.
